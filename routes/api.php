@@ -28,31 +28,4 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('/today', 'today')->name('today');
 
         });
-
-
-    Route::get('/student', function () {
-        // Exemplo de data vinda do banco de dados
-        $data = '2024-09-22';
-
-        // Cria um objeto DateTime a partir da data
-        $date = new DateTime($data);
-
-        // Define o nome do dia da semana em português
-        $diaSemana = $date->format('l');
-
-        // Um array para traduzir os dias da semana
-        $diasDaSemana = [
-            'Sunday' => 'Domingo',
-            'Monday' => 'Segunda-feira',
-            'Tuesday' => 'Terça-feira',
-            'Wednesday' => 'Quarta-feira',
-            'Thursday' => 'Quinta-feira',
-            'Friday' => 'Sexta-feira',
-            'Saturday' => 'Sábado',
-        ];
-
-        // Exibe o nome do dia da semana em português
-        return $diasDaSemana[$diaSemana]; // Saída: Domingo
-
-    })->middleware('auth:student');
 });

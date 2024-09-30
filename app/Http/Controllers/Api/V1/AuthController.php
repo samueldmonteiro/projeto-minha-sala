@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use App\Models\Admin;
 use App\Models\Student;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends ApiController
 {
 
-    public function loginStudent(Request $request)
+    public function loginStudent(LoginRequest $request)
     {
 
         $credentials = $request->only('email', 'password');
@@ -22,7 +21,7 @@ class AuthController extends ApiController
         })->first();
 
         if (!$student || !Hash::check($credentials['password'], $student->user->password)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return $this->jsonError('Email e/ou senha incorreto(s)', [], 401);
         }
 
         $token = JWTAuth::fromUser($student);
@@ -30,9 +29,8 @@ class AuthController extends ApiController
         return $this->json($this->respondWithToken($token), 'ACCESS TOKEN JWT');
     }
 
-    public function loginAdmin(Request $request)
+    public function loginAdmin(LoginRequest $request)
     {
-
         $credentials = $request->only('email', 'password');
 
         $admin = Admin::whereHas('user', function ($query) use ($credentials) {
@@ -40,7 +38,7 @@ class AuthController extends ApiController
         })->first();
 
         if (!$admin || !Hash::check($credentials['password'], $admin->user->password)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return $this->jsonError('Email e/ou Senha incorreto(s)', [], 401);
         }
 
         $token = JWTAuth::fromUser($admin);

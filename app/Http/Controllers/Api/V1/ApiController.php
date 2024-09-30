@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -27,15 +28,10 @@ class ApiController extends Controller
     }
 
 
-    protected function user()
+    protected function user(): User
     {
-        if (auth('student')->check()) {
-            return auth('student')->user();
-        }
-
-        if (auth('admin')->check()) {
-            return auth('admin')->user();
-        }
+        if (auth('student')->check()) return auth('student')->user();
+        if (auth('admin')->check()) return auth('admin')->user();
 
         return null;
     }
