@@ -5,13 +5,21 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Requests\LoginRequest;
 use App\Models\Admin;
 use App\Models\Student;
+use App\Services\JWTBlacklistService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends ApiController
 {
+    protected JWTBlacklistService $blacklistService;
 
-    public function loginStudent(LoginRequest $request)
+    public function __construct(JWTBlacklistService $blacklistService)
+    {
+        $this->blacklistService = $blacklistService;
+    }
+
+    public function loginStudent(LoginRequest $request): JsonResponse
     {
 
         $credentials = $request->only('email', 'password');
@@ -29,7 +37,7 @@ class AuthController extends ApiController
         return $this->json($this->respondWithToken($token), 'ACCESS TOKEN JWT');
     }
 
-    public function loginAdmin(LoginRequest $request)
+    public function loginAdmin(LoginRequest $request): JsonResponse
     {
         $credentials = $request->only('email', 'password');
 
@@ -46,13 +54,24 @@ class AuthController extends ApiController
         return $this->json($this->respondWithToken($token), 'ACCESS TOKEN JWT');
     }
 
-    public function me()
+    public function me(): JsonResponse
     {
-        return response()->json(['me' => $this->user()], 200);
+        return $this->json(['me' => $this->user()]);
     }
 
+    public function logout() 
+    {
+        $token = JWTAuth::getToken();
+        $payload = JWTAuth::getPayload($token);
 
-    protected function respondWithToken($token)
+        $this->blacklistService->addToBlacklist($token, $payload->get('exp'));
+
+        JWTAuth::invalidate($token);
+
+        return $this->json([], 'Logout efetuado com sucesso');
+    }
+
+    protected function respondWithToken($token): array
     {
         return [
             'access_token' => $token,

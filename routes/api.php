@@ -14,11 +14,12 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
 
     // authentication
-    Route::controller(AuthController::class)->prefix('auth')->group(function () {
+    Route::controller(AuthController::class)->prefix('auth')->name('auth.')->group(function () {
 
-        Route::get('me', 'me')->name('me');
         Route::post('login/student', 'loginStudent')->name('login.student');
         Route::post('login/admin', 'loginAdmin')->name('login.admin');
+        Route::get('me', 'me')->name('me')->middleware('authenticated');
+        Route::get('logout', 'logout')->name('logout')->middleware('authenticated');
     });
 
     // class information

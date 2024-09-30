@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\Authenticated;
 use App\Http\Middleware\ForceJsonResponse;
+use App\Http\Middleware\JWTBlacklisted;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(ForceJsonResponse::class);
+        $middleware->append(JWTBlacklisted::class);
 
         $middleware->alias([
             'authenticated' => Authenticated::class

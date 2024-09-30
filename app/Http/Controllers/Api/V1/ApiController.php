@@ -28,7 +28,7 @@ class ApiController extends Controller
     }
 
 
-    protected function user(): User
+    protected function user(): User|null
     {
         if (auth('student')->check()) return auth('student')->user();
         if (auth('admin')->check()) return auth('admin')->user();
