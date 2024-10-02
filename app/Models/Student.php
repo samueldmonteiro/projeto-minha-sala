@@ -12,7 +12,9 @@ class Student extends User
     protected $fillable = [
         'user_id',
         'course_id',
+        'shift_id',
         'semester',
+
     ];
 
     public function user()
@@ -25,13 +27,17 @@ class Student extends User
         return $this->belongsTo(Course::class);
     }
 
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class);
+    }
+
     protected function name(): Attribute
     {
         return Attribute::make(
             get: fn (string $value) => $this->user->name,
         );
     }
-
 
     protected function email(): Attribute
     {

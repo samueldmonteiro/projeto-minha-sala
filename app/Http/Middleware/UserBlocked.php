@@ -2,13 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\JWTBlacklistService;
+use App\Http\Controllers\Api\V1\ApiController;
 use Closure;
 use Illuminate\Http\Request;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response;
 
-class JWTBlacklisted
+class UserBlocked
 {
     /**
      * Handle an incoming request.
@@ -17,12 +16,16 @@ class JWTBlacklisted
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $check = (new JWTBlacklistService)->isBlacklisted(JWTAuth::getToken());
-        if ($check) return jsonError(
-            'Você não está autenticado',
-            ['auth' => 'token está na blacklist'],
-            401
-        );
+        $user = (new ApiController)->user();
+
+        if ($user) {
+            if ($user->user->blocked) return  response()->json([
+                'message' => "Usuário bloqueado",
+                'status' => false,
+                'errorMessages' => ['você foi bloqueado do sistema']
+            ], 401);
+        }
+
 
         return $next($request);
     }

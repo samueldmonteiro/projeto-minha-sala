@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Resources\StudentResource;
 use App\Models\Admin;
 use App\Models\Student;
 use App\Services\JWTBlacklistService;
@@ -14,9 +15,9 @@ class AuthController extends ApiController
 {
     protected JWTBlacklistService $blacklistService;
 
-    public function __construct(JWTBlacklistService $blacklistService)
+    public function __construct()
     {
-        $this->blacklistService = $blacklistService;
+        $this->blacklistService = new JWTBlacklistService();
     }
 
     public function loginStudent(LoginRequest $request): JsonResponse
@@ -29,12 +30,12 @@ class AuthController extends ApiController
         })->first();
 
         if (!$student || !Hash::check($credentials['password'], $student->user->password)) {
-            return $this->jsonError('Email e/ou senha incorreto(s)', [], 401);
+            return jsonError('Email e/ou senha incorreto(s)', [], 401);
         }
 
         $token = JWTAuth::fromUser($student);
 
-        return $this->json($this->respondWithToken($token), 'ACCESS TOKEN JWT');
+        return json($this->respondWithToken($token), 'ACCESS TOKEN JWT');
     }
 
     public function loginAdmin(LoginRequest $request): JsonResponse
@@ -46,17 +47,17 @@ class AuthController extends ApiController
         })->first();
 
         if (!$admin || !Hash::check($credentials['password'], $admin->user->password)) {
-            return $this->jsonError('Email e/ou Senha incorreto(s)', [], 401);
+            return jsonError('Email e/ou Senha incorreto(s)', [], 401);
         }
 
         $token = JWTAuth::fromUser($admin);
 
-        return $this->json($this->respondWithToken($token), 'ACCESS TOKEN JWT');
+        return json($this->respondWithToken($token), 'ACCESS TOKEN JWT');
     }
 
     public function me(): JsonResponse
     {
-        return $this->json(['me' => $this->user()]);
+        return json(['me' => new StudentResource($this->user())]);
     }
 
     public function logout() 
@@ -68,10 +69,10 @@ class AuthController extends ApiController
 
         JWTAuth::invalidate($token);
 
-        return $this->json([], 'Logout efetuado com sucesso');
+        return json([], 'Logout efetuado com sucesso');
     }
 
-    protected function respondWithToken($token): array
+    public function respondWithToken($token): array
     {
         return [
             'access_token' => $token,

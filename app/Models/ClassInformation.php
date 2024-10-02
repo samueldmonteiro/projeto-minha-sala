@@ -13,6 +13,7 @@ class ClassInformation extends Model
 
     protected $fillable = [
         'course_id',
+        'shift_id',
         'semester',
         'room',
         'block',
@@ -27,6 +28,12 @@ class ClassInformation extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class);
     }
 
     public function getClassByDay(User $user, DateTime $forDay = null): Collection
@@ -58,8 +65,13 @@ class ClassInformation extends Model
         $today = $weekDays[$weekDay];
         $course_id = (int)$user->course_id;
         $semester = (int)$user->semester;
+        $shift_id = (int)$user->shift_id;
+
 
         return $this->where('day', $today)
-            ->where('course_id', $course_id)->where('semester', $semester)->get();
+            ->where('course_id', $course_id)
+            ->where('semester', $semester)
+            ->where('shift_id', $shift_id)
+            ->get();
     }
 }

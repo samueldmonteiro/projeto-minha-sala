@@ -12,12 +12,14 @@ class StudentSeeder extends Seeder
         Student::create([
             'course_id' => 1,
             'user_id' => 1,
+            'shift_id' => 1,
             'semester' => 4
         ]);
 
         Student::create([
             'course_id' => 1,
             'user_id' => 2,
+            'shift_id' => 1,
             'semester' => 4
         ]);
     }

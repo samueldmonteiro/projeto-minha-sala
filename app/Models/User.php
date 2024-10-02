@@ -15,9 +15,20 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'avatar'
+        'avatar',
+        'type',
+        'blocked'
     ];
 
+    public function student()
+    {
+        return $this->has(Student::class);
+    }
+
+    public function admin()
+    {
+        return $this->has(Admin::class);
+    }
     
     protected $hidden = [
         'password',

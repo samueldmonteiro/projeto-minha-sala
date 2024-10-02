@@ -3,6 +3,7 @@
 use App\Http\Middleware\Authenticated;
 use App\Http\Middleware\ForceJsonResponse;
 use App\Http\Middleware\JWTBlacklisted;
+use App\Http\Middleware\UserBlocked;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(ForceJsonResponse::class);
         $middleware->append(JWTBlacklisted::class);
+        $middleware->append(UserBlocked::class);
 
         $middleware->alias([
             'authenticated' => Authenticated::class
@@ -30,20 +32,16 @@ return Application::configure(basePath: dirname(__DIR__))
         // auth exception
         $exceptions->render(function (AuthenticationException $e, Request $request) {
             if ($request->is('api/*')) {
-                return response()->json([
-                    'message' => "Você não está autenticado",
-                    'status' => false
-                ], 401);
+
+                return jsonError('Erro na autenticação', [], 401);  
             }
         });
 
         // not found route
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('*') || $request->is('api/*') || $request->is('api')) {
-                return response()->json([
-                    'message' => 'Endpoint não encontrado',
-                    'status' => false
-                ], 404);
+                
+                return jsonError('Endpoint não encontrado', [], 404);  
             }
         });
 

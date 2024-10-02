@@ -15,6 +15,7 @@ class ClassInformationSeeder extends Seeder
     {
         ClassInformation::create([
             'course_id' => 1,
+            'shift_id' => 1,
             'semester' => 4,
             'room' => 608,
             'block' => 'B',
@@ -28,6 +29,7 @@ class ClassInformationSeeder extends Seeder
 
         ClassInformation::create([
             'course_id' => 1,
+            'shift_id' => 1,
             'semester' => 4,
             'room' => 422,
             'block' => 'A',
@@ -41,6 +43,7 @@ class ClassInformationSeeder extends Seeder
 
         ClassInformation::create([
             'course_id' => 1,
+            'shift_id' => 1,
             'semester' => 4,
             'room' => 413,
             'block' => 'A',
@@ -54,6 +57,7 @@ class ClassInformationSeeder extends Seeder
 
         ClassInformation::create([
             'course_id' => 1,
+            'shift_id' => 1,
             'semester' => 4,
             'room' => 807,
             'block' => 'B',
@@ -67,6 +71,7 @@ class ClassInformationSeeder extends Seeder
 
         ClassInformation::create([
             'course_id' => 1,
+            'shift_id' => 1,
             'semester' => 4,
             'room' => 419,
             'block' => 'A',
@@ -80,6 +85,7 @@ class ClassInformationSeeder extends Seeder
 
         ClassInformation::create([
             'course_id' => 1,
+            'shift_id' => 1,
             'semester' => 4,
             'room' => 422,
             'block' => 'A',

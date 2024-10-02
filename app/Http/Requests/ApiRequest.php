@@ -16,7 +16,7 @@ class ApiRequest extends FormRequest
         $error = (new ValidationException($validator))->errors();
         throw new HttpResponseException(
 
-            (new ApiController())->jsonError(
+            jsonError(
                 (new ValidationException($validator))->getMessage(),
                 $error
             )

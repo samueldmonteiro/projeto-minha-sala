@@ -17,10 +17,8 @@ class Authenticated
     {
 
         if(auth('student')->check() == false && auth('admin')->check() == false){
-            return response()->json([
-                'message' => "Você não está autenticado",
-                'status' => false
-            ], 401);
+
+            return jsonError('Você não está autenticado', [], 401);  
         }
 
         return $next($request);

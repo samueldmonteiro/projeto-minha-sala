@@ -12,6 +12,7 @@ return new class extends Migration
         Schema::create('class_information', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained('courses');
+            $table->foreignId('shift_id')->constrained('shifts');
             $table->integer('semester');
             $table->integer('room');
             $table->string('block');

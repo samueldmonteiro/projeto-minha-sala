@@ -15,14 +15,16 @@ class UserSeeder extends Seeder
             'name' => 'Maria',
             'email' => 'maria@email.com',
             'password' => Hash::make('12345'),
-            'type' => 'student'
+            'type' => 'student',
+            'blocked' => false
         ]);
 
         User::create([
             'name' => 'joão',
             'email' => 'joão@email.com',
             'password' => Hash::make('4444'),
-            'type' => 'student'
+            'type' => 'student',
+            'blocked' => false
 
         ]);
 
@@ -30,7 +32,8 @@ class UserSeeder extends Seeder
             'name' => 'Samuel Davi',
             'email' => 'samuel@email.com',
             'password' => Hash::make('1234'),
-            'type' => 'admin'
+            'type' => 'admin',
+            'blocked' => false
         ]);
     }
 }
