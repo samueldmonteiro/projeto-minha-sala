@@ -15,5 +15,4 @@ class ApiController extends Controller
 
         return null;
     }
-
 }
