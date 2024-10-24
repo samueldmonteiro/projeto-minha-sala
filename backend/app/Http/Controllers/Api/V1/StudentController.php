@@ -16,14 +16,6 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
     public function store(StudentRegister $request): JsonResponse
     {
         $data = (object)$request->all();

@@ -57,10 +57,10 @@ class AuthController extends ApiController
 
     public function me(): JsonResponse
     {
-        return json(['me' => new StudentResource($this->user())]);
+        return json(['user' => new StudentResource($this->user())]);
     }
 
-    public function logout() 
+    public function logout()
     {
         $token = JWTAuth::getToken();
         $payload = JWTAuth::getPayload($token);
@@ -77,7 +77,8 @@ class AuthController extends ApiController
         return [
             'access_token' => $token,
             'token_type' => 'bearer',
-            #'expires_in' => auth()->factory()->getTTL() * 60
+            'user' => $this->user()
+            #'expires_in' => Auth::factory()->getTTL() * 60
         ];
     }
 }

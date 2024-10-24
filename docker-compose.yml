@@ -15,6 +15,7 @@ services:
 
     depends_on:
       - db
+      - redis
     networks:
       - minha_sala_anhanguera
 

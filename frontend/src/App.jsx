@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import Header from './Components/Header'
+import Footer from "./Components/Footer"
+import { createTheme, CssBaseline, ThemeProvider } from "@mui/material"
+import GlobalStyles from "./globals/GlobalStyles"
+import Home from "./Pages/Home"
+import About from "./Pages/About"
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#f75421',  // Define a cor primária (para o botão primário, por exemplo)
+        },
+        secondary: {
+            main: '#4caf50',  // Define a cor secundária
+        },
+        appBar: {
+            main: '#f75421',  // Define a cor da AppBar (caso você queira uma cor específica)
+        },
+    },
+    components: {
+        MuiAppBar: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#f75421',  // Cor customizada da AppBar
+                },
+            },
+        },
+    },
+});
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <>
+            <BrowserRouter>
+                <ThemeProvider theme={theme}>
+
+                    <CssBaseline />
+                    <GlobalStyles />
+                    <Header />
+
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/sobre" element={<About />} />
+
+                    </Routes>
+
+                    <Footer />
+                </ThemeProvider>
+            </BrowserRouter>
+        </>
+    )
 }
 
 export default App
