@@ -1,11 +1,10 @@
 // GlobalStyles.js
 import { createGlobalStyle } from 'styled-components';
 
-export const colors = {
-    primary: '#3F51B5', // Definir cor principal (azul)
-    secondary: '#FFEB3B', // Definir cor secundária (verde)
-    danger: '#e74c3c', // Definir cor de perigo (vermelho)
-    // Adicione mais cores conforme necessário
+export const Pallete = {
+    primary: '#ff583a',
+    secondary: '#42a5f5',
+    danger: '#e74c3c',
 }
 
 const GlobalStyles = createGlobalStyle`
@@ -19,8 +18,7 @@ const GlobalStyles = createGlobalStyle`
     
     body {
         font-family: "Poppins", serif !important;
-        background-color: #f9f9f9;
-        color: #333;
+        //background-color: #f9f9f9;
     }
     
 
@@ -28,6 +26,13 @@ const GlobalStyles = createGlobalStyle`
         color:white;
         text-decoration:none;
     }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #121212 inset !important;
+}
 `;
 
 export default GlobalStyles;

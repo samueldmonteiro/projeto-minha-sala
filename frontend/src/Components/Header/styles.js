@@ -29,12 +29,19 @@ export const UserAvatar = styled.div`
     }
 `
 
-export const MobileLinks = styled.div`
-    @media (max-width: 600px){
-        a {
-            color: #333 !important;
-        }
-    }  
+export const NavLinks = styled.div`
+
+    button {
+        margin-left: 20px;
+    }
+
+    svg{
+        display: inline-block;
+        position: relative;
+        top:4px;
+        margin-right:4px;
+        font-size: 18px;
+    } 
 `
 
 export const MenuUserLinks = styled.div`

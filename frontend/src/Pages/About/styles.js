@@ -1,14 +1,12 @@
 import styled from 'styled-components';
 
 export const TitleOfDescription = styled.h2`
-
     margin-bottom: 10px;
     font-size: 20px;
 `
 
 export const Description = styled.p`
     line-height: 1.5em;
-    
 `
 
 export const PersonCardContainer = styled.div`
@@ -17,11 +15,13 @@ export const PersonCardContainer = styled.div`
     gap:30px;
     flex-wrap:wrap;
     justify-content: center;
-    
+    margin-bottom: 80px;
+
 `
 
 export const PersonCard = styled.div`
-    border: 1px solid gray;
+    border: 2px solid grey;
+    border-radius:5px;
     display: flex;
     flex-direction:column;
     padding: 30px;
@@ -35,5 +35,5 @@ export const PersonCardPosition = styled.div`
     font-weight: 600;
 `
 export const PersonCardName = styled.div`
-    
+    font-size: 15px;
 `

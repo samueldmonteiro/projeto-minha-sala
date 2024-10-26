@@ -13,15 +13,28 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Avatar, Menu, MenuItem } from '@mui/material';
-import { HeaderContainer, MobileLinks, Logo, UserAvatar } from './styles';
+import { HeaderContainer, NavLinks, Logo, UserAvatar } from './styles';
 import { Link } from 'react-router-dom';
 import LogoImage from '../../assets/logo.png'
 import UserIconMenu from './UserIconMenu';
+import InfoIcon from '@mui/icons-material/Info';
+import HomeIcon from '@mui/icons-material/Home';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const drawerWidth = 240;
+
 const navItems = [
-    <Link to="/">Home</Link>,
-    <Link to="/sobre">Sobre</Link>,
+    <Link to="/"><HomeIcon /> Home</Link>,
+    <Link to="/calendario"><CalendarMonthIcon /> Calendário</Link>,
+    <Link to="/sobre"><InfoIcon /> Sobre</Link>,
+];
+
+
+const navItemsMobile = [
+    <Link to="/"><HomeIcon /> Home</Link>,
+    <Link to="/calendario"><CalendarMonthIcon /> Calendário</Link>,
+    <Link to="/sobre"><InfoIcon /> Sobre</Link>,
+
 ];
 
 function Header(props) {
@@ -40,9 +53,9 @@ function Header(props) {
                 </Link>
             </Typography>
             <Divider />
-            <MobileLinks>
+            <NavLinks>
                 <List>
-                    {navItems.map((item, key) => (
+                    {navItemsMobile.map((item, key) => (
                         <ListItem key={key} disablePadding>
                             <ListItemButton sx={{ textAlign: 'center' }}>
                                 <ListItemText>
@@ -53,7 +66,7 @@ function Header(props) {
                         </ListItem>
                     ))}
                 </List>
-            </MobileLinks>
+            </NavLinks>
         </Box>
     );
 
@@ -88,16 +101,18 @@ function Header(props) {
                                 <Logo src={LogoImage} />
                             </Link>
                         </Typography>
-                        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            {navItems.map((item, index) => (
-                                <Button key={index}>
-                                    {item}
+                        <NavLinks>
+                            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                                {navItems.map((item, index) => (
+                                    <Button key={index}>
+                                        {item}
+                                    </Button>
+                                ))}
+                                <Button>
+                                    <UserIconMenu />
                                 </Button>
-                            ))}
-                            <Button>
-                                <UserIconMenu />
-                            </Button>
-                        </Box>
+                            </Box>
+                        </NavLinks>
 
                     </Toolbar>
                 </HeaderContainer>
@@ -115,8 +130,10 @@ function Header(props) {
                         display: { xs: 'block', sm: 'none' },
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
                     }}
+
                 >
                     {drawer}
+
                 </Drawer>
             </nav>
         </Box>

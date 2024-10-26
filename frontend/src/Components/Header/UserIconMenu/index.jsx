@@ -1,6 +1,10 @@
 import { Avatar, Menu, MenuItem } from '@mui/material';
 import * as React from 'react';
 import UserImage from '../../../assets/user.jpg';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { NavLinks } from './styles';
+import { Link } from 'react-router-dom';
 
 const UserIconMenu = () => {
 
@@ -30,9 +34,15 @@ const UserIconMenu = () => {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <NavLinks>
+                    <Link to="/">
+                        <MenuItem onClick={handleClose}><AccountCircleIcon />Meu Perfil</MenuItem>
+                    </Link>
+                    <Link to="/">
+                        <MenuItem onClick={handleClose}><LogoutIcon />Sair</MenuItem>
+                    </Link>
+                </NavLinks>
+
             </Menu>
         </>
     );

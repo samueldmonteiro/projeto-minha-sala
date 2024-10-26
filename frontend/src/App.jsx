@@ -1,28 +1,28 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom"
 import Header from './Components/Header'
 import Footer from "./Components/Footer"
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material"
-import GlobalStyles from "./globals/GlobalStyles"
+import GlobalStyles, { Pallete } from "./globals/GlobalStyles"
 import Home from "./Pages/Home"
 import About from "./Pages/About"
+import Login from "./Pages/Auth/Login"
 
 const theme = createTheme({
     palette: {
+        mode: 'dark',
         primary: {
-            main: '#f75421',  // Define a cor primária (para o botão primário, por exemplo)
+            main: Pallete.primary,
         },
         secondary: {
-            main: '#4caf50',  // Define a cor secundária
-        },
-        appBar: {
-            main: '#f75421',  // Define a cor da AppBar (caso você queira uma cor específica)
+            main: Pallete.secondary,  
         },
     },
-    components: {
-        MuiAppBar: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: '#f75421',  // Cor customizada da AppBar
+
+    MuiInputBase: {
+        styleOverrides: {
+            root: {
+                "&:has(> input:-webkit-autofill)": {
+                    backgroundColor: "red",
                 },
             },
         },
@@ -30,25 +30,35 @@ const theme = createTheme({
 });
 
 function App() {
+    return (
+        <BrowserRouter>
+            <Main />
+        </BrowserRouter>
+    );
+}
 
+function Main() {
+
+    const location = useLocation();
+    const hiddenHeaderRoutes = ["/entrar", "/cadastro"];
+
+    const shouldShowHeader = !hiddenHeaderRoutes.includes(location.pathname);
     return (
         <>
-            <BrowserRouter>
-                <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
 
-                    <CssBaseline />
-                    <GlobalStyles />
-                    <Header />
+                <CssBaseline />
+                <GlobalStyles />
+                {shouldShowHeader && <Header />}
 
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/sobre" element={<About />} />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/sobre" element={<About />} />
+                    <Route path="/entrar" element={<Login />} />
+                </Routes>
 
-                    </Routes>
-
-                    <Footer />
-                </ThemeProvider>
-            </BrowserRouter>
+                <Footer />
+            </ThemeProvider>
         </>
     )
 }
