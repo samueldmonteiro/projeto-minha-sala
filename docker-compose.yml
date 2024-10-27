@@ -41,9 +41,6 @@ services:
     command: |
       bash -c "[ ! -d 'node_modules' ] && yarn install && yarn dev --host 0.0.0.0 --port 5173 || yarn dev --host 0.0.0.0 --port 5173"
 
-    depends_on:
-      - backend
-
     networks:
       - minha_sala_anhanguera
 

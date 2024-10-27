@@ -6,6 +6,9 @@ import GlobalStyles, { Pallete } from "./globals/GlobalStyles"
 import Home from "./Pages/Home"
 import About from "./Pages/About"
 import Login from "./Pages/Auth/Login"
+import ForgotPassword from "./Pages/Auth/ForgotPassword"
+import Register from "./Pages/Auth/Register"
+import Calender from "./Pages/Calender"
 
 const theme = createTheme({
     palette: {
@@ -40,9 +43,10 @@ function App() {
 function Main() {
 
     const location = useLocation();
-    const hiddenHeaderRoutes = ["/entrar", "/cadastro"];
+    const hiddenHeaderRoutes = ['/entrar', '/cadastrar', '/esqueceu'];
 
     const shouldShowHeader = !hiddenHeaderRoutes.includes(location.pathname);
+    
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -55,6 +59,11 @@ function Main() {
                     <Route path="/" element={<Home />} />
                     <Route path="/sobre" element={<About />} />
                     <Route path="/entrar" element={<Login />} />
+                    <Route path="/cadastrar" element={<Register />} />
+                    <Route path="/esqueceu" element={<ForgotPassword />} />
+
+                    <Route path="/calendario" element={<Calender />} />
+
                 </Routes>
 
                 <Footer />

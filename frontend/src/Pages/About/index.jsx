@@ -1,11 +1,13 @@
 import React from 'react';
 import { PageContainer, SectionContainer, TitleOne } from '../../globals/styles';
 import InfoIcon from '@mui/icons-material/Info';
-import { Description, PersonCard, PersonCardContainer, PersonCardName, PersonCardPosition, TitleOfDescription } from './styles';
+import { CodePix, ContributeContainer, Description, PersonCard, PersonCardContainer, PersonCardName, PersonCardPosition, QRCodePix, TitleOfDescription } from './styles';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import { Avatar } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
 import UserImage from '../../assets/user.jpg';
+import PixImage from '../../assets/qrcode-pix.png'
+import PixIcon from '@mui/icons-material/Pix';
 
 
 const persons = [
@@ -48,7 +50,18 @@ const About = () => {
                     ))}
                 </PersonCardContainer>
             </SectionContainer>
+            <SectionContainer>
+                <ContributeContainer>
+                    <TitleOne><PixIcon /> Contribua</TitleOne>
+                    <div>
+                        <QRCodePix src={PixImage} alt="" />
+                        <CodePix>00020126360014BR.GOV.BCB.PIX0114+559897005177852040000530398654040.005802BR5923Samuel Davi G. Monteiro6008Sao Luis62070503***63042AAF</CodePix>
+                    </div>
+                </ContributeContainer>
+            </SectionContainer>
         </PageContainer>
+
+
     )
 }
 

@@ -15,7 +15,7 @@ export const HeaderContainer = styled.div`
 `
 
 export const Logo = styled.img`
-    width:60px;
+    width:${props => props.size ? props.size+'px'  : '60px'};;
     position:relative;
     padding: 5px 0px;
     top:5px;

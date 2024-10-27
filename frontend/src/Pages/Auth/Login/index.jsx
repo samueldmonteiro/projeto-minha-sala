@@ -18,20 +18,17 @@ import { PageContainer } from '../../../globals/styles';
 import { LoginContainer } from './styles';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Validation from './Validation';
+import Header from '../../../Components/Auth/Header';
 
 const providers = [{ id: 'credentials', name: 'Email and Password' }];
 
-
 function CustomEmailField({ register, errors, loginError }) {
-
-
     return (
         <>
-            {loginError && <><Alert sx={{ display: 'flex', justifyContent: 'center' }} severity="error">Email e/ou Senha Incorreto(s)</Alert>
+            {loginError && <><Alert sx={{ display: 'flex', justifyContent: 'center' }} severity="error">Login Incorreto!</Alert>
                 <br /></>}
             <TextField
                 {...register("email")}
@@ -121,7 +118,7 @@ function CustomButton() {
 
 function SignUpLink() {
     return (
-        <Link to="/" variant="body2" color={'secondary'}>
+        <Link to="/cadastrar" variant="body2" color={'secondary'}>
             Cadastrar-me
         </Link>
     );
@@ -129,7 +126,7 @@ function SignUpLink() {
 
 function ForgotPasswordLink() {
     return (
-        <Link to="/" variant="body2" color={'secondary'}>
+        <Link to="/esqueceu" variant="body2" color={'secondary'}>
             Esqueceu sua senha?
         </Link>
     );
@@ -150,7 +147,6 @@ const TranslatePage = () => {
     });
 }
 
-
 export default function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(Validation),
@@ -158,44 +154,41 @@ export default function Login() {
 
     const [loginError, setLoginError] = useState(false);
 
-
     useEffect(() => {
         TranslatePage();
     }, []);
 
     const theme = useTheme();
 
-    const onSubmit = (data) => {
+    const onSubmit = (formData) => {
         setLoginError(false);
 
-
         setLoginError(true);
-        console.log(JSON.stringify(data));
+        console.log(JSON.stringify(formData.get('password')));
     };
 
     return (
-        <PageContainer>
-            <LoginContainer>
 
-                <AppProvider theme={theme}>
-
-                    <SignInPage
-                        signIn={(provider, formData) =>
-                            handleSubmit(onSubmit)(formData)
-                        }
-                        slots={{
-                            emailField: (props) => <CustomEmailField loginError={loginError} {...props} register={register} errors={errors} />,
-                            passwordField: (props) => <CustomPasswordField {...props} register={register} errors={errors} />,
-                            submitButton: CustomButton,
-                            signUpLink: SignUpLink,
-                            forgotPasswordLink: ForgotPasswordLink,
-                        }}
-                        providers={providers}
-
-                    />
-
-                </AppProvider>
-            </LoginContainer>
-        </PageContainer>
+        <>
+            <Header />
+            <PageContainer>
+                <LoginContainer>
+                    <AppProvider theme={theme}>
+                        <SignInPage
+                            signIn={(provider, formData) =>
+                                onSubmit(formData)
+                            }
+                            slots={{
+                                emailField: (props) => <CustomEmailField loginError={loginError} {...props} register={register} errors={errors} />,
+                                passwordField: (props) => <CustomPasswordField {...props} register={register} errors={errors} />,
+                                submitButton: CustomButton,
+                                signUpLink: SignUpLink,
+                                forgotPasswordLink: ForgotPasswordLink,
+                            }}
+                            providers={providers}
+                        />
+                    </AppProvider>
+                </LoginContainer>
+            </PageContainer></>
     );
 }
