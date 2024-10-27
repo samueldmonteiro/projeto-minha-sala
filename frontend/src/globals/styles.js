@@ -28,7 +28,7 @@ export const TitleOne = styled.h1`
     margin:30px 0px;
 
     @media (max-width: 600px){
-        font-size:25px;
+        font-size:22px;
     }
 
     svg {

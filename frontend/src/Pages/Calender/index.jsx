@@ -1,32 +1,80 @@
-import { PageContainer } from '../../globals/styles';
+import { PageContainer, TitleOne } from '../../globals/styles';
 import dayjs from 'dayjs';
-import 'dayjs/locale/pt-br'; // Importa o idioma português
+import 'dayjs/locale/pt-br';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
+import { CalenderContainer } from './styles';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { Button } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import ErrorIcon from '@mui/icons-material/Error';
+
+dayjs.locale('pt-br');
+
+const ErrorTransition = forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const Calender = () => {
-    const [value, setValue] = useState(dayjs());
 
-    const minDate = dayjs().subtract(1, 'year');
-    const maxDate = dayjs().add(1, 'year');
+    const [openErrorModal, setOpenErrorModal] = useState(false);
+    const [currentDay, setCurrentDay] = useState(dayjs());
+
+    const minDate = dayjs().subtract(0, 'week');
+    const maxDate = dayjs().add(1, 'week');
+
+    const handleSelectedDay = () => {
+
+        const blockedDays = ['domingo'];
+        const selectedDay = currentDay.format('dddd');
+
+        if (blockedDays.includes(selectedDay)) {
+            setOpenErrorModal(true);
+        }
+
+        console.log(selectedDay);
+    }
 
     return (
         <PageContainer>
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
-                <DemoContainer components={['DateCalendar', 'DateCalendar']}>
-                    <DemoItem >
-                        <DateCalendar
-                            value={value}
-                            onChange={(newValue) => setValue(newValue)}
-                            minDate={minDate}
-                            maxDate={maxDate}
-                        />
-                    </DemoItem>
-                </DemoContainer>
-            </LocalizationProvider>
+            <Dialog
+                open={openErrorModal}
+                TransitionComponent={ErrorTransition}
+                keepMounted
+                onClose={() => setOpenErrorModal(false)}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle><ErrorIcon sx={{ position: 'relative', top: '6px' }} /> {"Ops!"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Nenhuma aula encontrada nesse dia!
+                    </DialogContentText>
+                </DialogContent>
+
+            </Dialog>
+            <CalenderContainer>
+                <TitleOne><CalendarMonthIcon /> Selecine um dia de Aula</TitleOne>
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+                    <DemoContainer components={['DateCalendar', 'DateCalendar']}>
+                        <DemoItem >
+                            <DateCalendar
+                                value={currentDay}
+                                onChange={(newValue) => setCurrentDay(newValue)}
+                                minDate={minDate}
+                                maxDate={maxDate}
+                            />
+                        </DemoItem>
+                    </DemoContainer>
+                </LocalizationProvider>
+                <Button onClick={handleSelectedDay} variant='contained' color={'primary'}>Ver Informações</Button>
+            </CalenderContainer>
         </PageContainer>
     );
 }
