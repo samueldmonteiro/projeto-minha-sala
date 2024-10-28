@@ -14,7 +14,7 @@ export const PageContainer = styled.div`
         width: auto;
         margin: 0;
         margin-top:90px;
-        padding: 0 30px;
+        padding: 0 28px;
     }
 `
 

@@ -11,6 +11,7 @@ import { Logo } from '../../Header/styles';
 import LogoImage from '../../../assets/logo.png'
 import { PageContainer } from '@toolpad/core';
 import { HeaderAuthContainer, LogoArea } from './styles';
+import { Link } from 'react-router-dom';
 
 function HideOnScroll(props) {
     const { children, window } = props;
@@ -42,6 +43,7 @@ export default function Header(props) {
         <>
             <CssBaseline />
             <HideOnScroll {...props}>
+            <Link to="/entrar">
                 <AppBar sx={{ backgroundColor: 'black' }}>
                     <HeaderAuthContainer>
                         <Toolbar>
@@ -54,6 +56,7 @@ export default function Header(props) {
                         </Toolbar>
                     </HeaderAuthContainer>
                 </AppBar>
+                </Link>
             </HideOnScroll>
             <Toolbar />
         </>

@@ -603,6 +603,19 @@
     clsx "^2.1.1"
     prop-types "^15.8.1"
 
+"@mui/base@^5.0.0-beta.60":
+  version "5.0.0-beta.60"
+  resolved "https://registry.yarnpkg.com/@mui/base/-/base-5.0.0-beta.60.tgz#0b4642089106fa76553024d96ed44476c9f52969"
+  integrity sha512-w8twR3qCUI+uJHO5xDOuc1yB5l46KFbvNsTwIvEW9tQkKxVaiEFf2GAXHuvFJiHfZLqjzett6drZjghy8D1Z1A==
+  dependencies:
+    "@babel/runtime" "^7.25.7"
+    "@floating-ui/react-dom" "^2.1.1"
+    "@mui/types" "^7.2.18"
+    "@mui/utils" "^6.1.5"
+    "@popperjs/core" "^2.11.8"
+    clsx "^2.1.1"
+    prop-types "^15.8.1"
+
 "@mui/core-downloads-tracker@^6.1.5":
   version "6.1.5"
   resolved "https://registry.yarnpkg.com/@mui/core-downloads-tracker/-/core-downloads-tracker-6.1.5.tgz#96fe5068d55fba27d90421b8265b965c203d09e2"
