@@ -16,7 +16,7 @@ import { SignInPage } from '@toolpad/core/SignInPage';
 import { useTheme } from '@mui/material/styles';
 import { PageContainer } from '../../../globals/styles';
 import { LoginContainer } from './styles';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -171,6 +171,11 @@ function ButtonLoading() {
 
 
 export default function Login() {
+
+    const { login, isLogged } = useAuth();
+    if(isLogged) return <Navigate to="/"/>;
+    
+
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(Validation),
     });
@@ -181,11 +186,10 @@ export default function Login() {
 
     const theme = useTheme();
 
-    const { login, isLogged } = useAuth();
     const [loginError, setLoginError] = useState(false);
     const [loadingLogin, setLoadingLogin] = useState(false);
-
     const navigate = useNavigate();
+
 
     const onSubmit = async (formData) => {
         setLoginError(false);

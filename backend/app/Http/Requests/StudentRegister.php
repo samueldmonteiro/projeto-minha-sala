@@ -25,9 +25,9 @@ class StudentRegister extends ApiRequest
             'name' => ['required', 'string', 'max:60'],
             'email' => ['required', 'email', 'max:60'],
             'password' => ['required', 'string', 'min:4', 'max:1000'],
-            'course' => ['required', 'integer', 'max:10'],
-            'shift' => ['required', 'integer', 'max:10'],
-            'semester' => ['required', 'integer', 'max:10'],
+            'course' => ['required', 'string', 'max:70'],
+            'shift' => ['required', 'string', 'max:70'],
+            'semester' => ['required', 'string', 'max:70'],
         ];
     }
 }

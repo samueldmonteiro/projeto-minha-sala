@@ -15,8 +15,19 @@ export const CheckAuthentication = async () => {
 export const loginStudent = async (email, password) => {
 
     try {
-        const resp = await api.post('/auth/login/student', {email, password});
+        const resp = await api.post('/auth/login/student', { email, password });
 
+        return resp.data;
+
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+
+export const registerStudent = async (data) => {
+    try {
+        const resp = await api.post('/auth/register/student', data);
         return resp.data;
 
     } catch (error) {

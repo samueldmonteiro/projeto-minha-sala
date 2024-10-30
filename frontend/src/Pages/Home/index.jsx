@@ -10,6 +10,8 @@ import { ClassInformationBlock, ClassInformationContainer, Date, MoreInformation
 import Pagination from '@mui/material/Pagination';
 import { getByDay, getTodayClass } from '../../Services/ClassService';
 import LoadPage from '../../Components/LoadPage';
+import useAuth from '../../Hooks/useAuth';
+
 import { useLocation } from 'react-router-dom';
 
 function getTodayDate() {
@@ -38,6 +40,9 @@ const Home = () => {
     };
 
     const currentClass = classData[currentClassIndex];
+
+    const {user} = useAuth();
+    console.log(user);
 
     useEffect(() => {
         if (!searchDay) {
@@ -90,7 +95,7 @@ const Home = () => {
                         </Time>
 
                         <Date>
-                            {!searchDay && getTodayDate()}
+                            {searchDay ? currentClass.day : getTodayDate()}
                         </Date>
 
                         <Room>

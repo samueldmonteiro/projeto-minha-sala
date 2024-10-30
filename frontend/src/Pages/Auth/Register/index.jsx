@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PageContainer, TitleOne } from '../../../globals/styles';
@@ -12,17 +12,41 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Button, Alert } from '@mui/material';
 import validation from './validation';
+import { registerStudent } from '../../../Services/AuthService';
+import { useNavigate } from 'react-router-dom';
 
-const courses = ['Ciencia', 'Enfermagem'];
+const courses = ['Ciência da Computação (M)'];
+const shifts = ['Matutino'];
+const semesters = ['4'];
 
 
 const Register = () => {
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(validation),
+        defaultValues: {  // Definindo valores padrão
+            name: '',
+            email: '',
+            password: '',
+            course: '',
+            semester: '',
+            shift: '',
+        }
     });
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const onSubmit = async (data) => {
+
+        const result = await registerStudent(data);
+        console.log(result);
+        if(!result.status){
+            setError(result.message);
+            return;
+        }
+
+        localStorage.setItem('token', result.data.token);
+        navigate('/');
     };
 
     return (
@@ -31,19 +55,19 @@ const Register = () => {
             <PageContainer>
                 <RegisterForm onSubmit={handleSubmit(onSubmit)}>
                     <TitleOne><PersonAddIcon /> Crie sua Conta</TitleOne>
-                   {false && <MessageContainer>
-                        <Alert severity="warning">Erro ao cadastrar</Alert>
+                    {error && <MessageContainer>
+                        <Alert severity="warning">{error}</Alert>
                     </MessageContainer>}
                     <Controller
-                        name="nome"
+                        name="name"
                         required
                         control={control}
                         render={({ field }) => (
                             <TextField
                                 {...field}
                                 label="Nome Completo"
-                                error={!!errors.nome}
-                                helperText={errors.nome?.message}
+                                error={!!errors.name}
+                                helperText={errors.name?.message}
                                 sx={{ marginBottom: '23px' }}
                                 InputProps={{
                                     startAdornment: <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />,
@@ -57,6 +81,7 @@ const Register = () => {
                         control={control}
                         render={({ field }) => (
                             <TextField
+
                                 {...field}
                                 label="E-mail"
                                 type="email"
@@ -71,15 +96,16 @@ const Register = () => {
                     />
 
                     <Controller
-                        name="senha"
+                        name="password"
                         control={control}
                         render={({ field }) => (
                             <TextField
+
                                 {...field}
                                 label="Senha"
                                 type="password"
-                                error={!!errors.senha}
-                                helperText={errors.senha?.message}
+                                error={!!errors.password}
+                                helperText={errors.password?.message}
                                 sx={{ marginBottom: '23px' }}
                                 InputProps={{
                                     startAdornment: <VpnKeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />,
@@ -89,10 +115,12 @@ const Register = () => {
                     />
                     <SelectInputs>
                         <Controller
-                            name="curso"
+                            name="course"
                             control={control}
                             render={({ field }) => (
                                 <Autocomplete
+
+
                                     {...field}
                                     options={courses}
                                     onChange={(_, data) => field.onChange(data)}
@@ -100,8 +128,8 @@ const Register = () => {
                                         <TextField
                                             {...params}
                                             label="Curso"
-                                            error={!!errors.curso}
-                                            helperText={errors.curso?.message}
+                                            error={!!errors.course}
+                                            helperText={errors.course?.message}
                                         />
                                     )}
                                     sx={{ marginBottom: '23px' }}
@@ -110,19 +138,21 @@ const Register = () => {
                         />
 
                         <Controller
-                            name="semestre"
+                            name="semester"
                             control={control}
                             render={({ field }) => (
                                 <Autocomplete
+
+
                                     {...field}
-                                    options={courses}
+                                    options={semesters}
                                     onChange={(_, data) => field.onChange(data)}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
                                             label="Semestre"
-                                            error={!!errors.semestre}
-                                            helperText={errors.semestre?.message}
+                                            error={!!errors.semester}
+                                            helperText={errors.semester?.message}
                                         />
                                     )}
                                     sx={{ marginBottom: '23px' }}
@@ -131,19 +161,21 @@ const Register = () => {
                         />
 
                         <Controller
-                            name="turno"
+                            name="shift"
                             control={control}
                             render={({ field }) => (
                                 <Autocomplete
+
+                                    required
                                     {...field}
-                                    options={courses}
+                                    options={shifts}
                                     onChange={(_, data) => field.onChange(data)}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
                                             label="Turno"
-                                            error={!!errors.turno}
-                                            helperText={errors.turno?.message}
+                                            error={!!errors.shift}
+                                            helperText={errors.shift?.message}
                                         />
                                     )}
                                     sx={{ marginBottom: '23px' }}

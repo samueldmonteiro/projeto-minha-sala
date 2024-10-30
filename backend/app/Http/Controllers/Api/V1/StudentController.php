@@ -27,11 +27,13 @@ class StudentController extends Controller
             );
         }
 
-        if (!Course::find($data->course)->first()) {
+        $course = Course::where('name', $data->course)->first();
+        if (!$course) {
             return jsonError('Curso não encontrado, Selecione novamente!');
         }
 
-        if (!Shift::find($data->shift)->first()) {
+        $shift = Shift::where('name', $data->shift)->first();
+        if (!$shift) {
             return jsonError('Turno não encontrado, Selecione novamente!');
         }
 
@@ -48,8 +50,8 @@ class StudentController extends Controller
 
         $student = new Student();
         $student->user_id = $user->id;
-        $student->course_id = $data->course;
-        $student->shift_id = $data->shift;
+        $student->course_id = $course->id;
+        $student->shift_id = $shift->id;
         $student->semester = $data->semester;
 
         if (!$student->save()) {
@@ -59,10 +61,8 @@ class StudentController extends Controller
         $token = JWTAuth::fromUser($student);
 
         return json(
-            [
-                'student' => new StudentResource($student),
-                'auth' => (new AuthController)->respondWithToken($token)
-            ],
+            (new AuthController)->respondWithToken($token, new StudentResource($student)),
+
             'Cadastro efetuado com Sucesso!'
         );
     }
