@@ -9,6 +9,8 @@ import Login from "./Pages/Auth/Login"
 import ForgotPassword from "./Pages/Auth/ForgotPassword"
 import Register from "./Pages/Auth/Register"
 import Calender from "./Pages/Calender"
+import { AuthProvider } from "./Context/AuthContext"
+import PrivateRoute from "./Routes/PrivateRoute"
 
 const theme = createTheme({
     palette: {
@@ -17,7 +19,7 @@ const theme = createTheme({
             main: Pallete.primary,
         },
         secondary: {
-            main: Pallete.secondary,  
+            main: Pallete.secondary,
         },
     },
 
@@ -46,25 +48,26 @@ function Main() {
     const hiddenHeaderRoutes = ['/entrar', '/cadastrar', '/esqueceu'];
 
     const shouldShowHeader = !hiddenHeaderRoutes.includes(location.pathname);
-    
+
     return (
         <>
             <ThemeProvider theme={theme}>
 
                 <CssBaseline />
                 <GlobalStyles />
-                {shouldShowHeader && <Header />}
+                <AuthProvider>
+                    {shouldShowHeader && <Header />}
 
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/sobre" element={<About />} />
-                    <Route path="/entrar" element={<Login />} />
-                    <Route path="/cadastrar" element={<Register />} />
-                    <Route path="/esqueceu" element={<ForgotPassword />} />
+                    <Routes>
+                        <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+                        <Route path="/sobre" element={<PrivateRoute><About /></PrivateRoute>} />
+                        <Route path="/entrar" element={<Login />} />
+                        <Route path="/cadastrar" element={<Register />} />
+                        <Route path="/esqueceu" element={<ForgotPassword />} />
+                        <Route path="/calendario" element={<PrivateRoute><Calender /></PrivateRoute>} />
 
-                    <Route path="/calendario" element={<Calender />} />
-
-                </Routes>
+                    </Routes>
+                </AuthProvider>
 
                 <Footer />
             </ThemeProvider>

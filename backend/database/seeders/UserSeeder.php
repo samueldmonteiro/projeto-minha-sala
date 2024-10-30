@@ -12,17 +12,17 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Maria',
-            'email' => 'maria@email.com',
-            'password' => Hash::make('12345'),
+            'name' => 'Erick Mendes',
+            'email' => 'erick@gmail.com',
+            'password' => Hash::make('4321'),
             'type' => 'student',
             'blocked' => false
         ]);
 
         User::create([
-            'name' => 'joão',
-            'email' => 'joão@email.com',
-            'password' => Hash::make('4444'),
+            'name' => 'Luis Gustavo',
+            'email' => 'lgustavo@email.com',
+            'password' => Hash::make('4321'),
             'type' => 'student',
             'blocked' => false
 
@@ -31,8 +31,8 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Samuel Davi',
             'email' => 'samuel@email.com',
-            'password' => Hash::make('1234'),
-            'type' => 'admin',
+            'password' => Hash::make('4321'),
+            'type' => 'student',
             'blocked' => false
         ]);
     }

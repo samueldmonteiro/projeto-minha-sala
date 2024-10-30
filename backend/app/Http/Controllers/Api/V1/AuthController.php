@@ -35,7 +35,7 @@ class AuthController extends ApiController
 
         $token = JWTAuth::fromUser($student);
 
-        return json($this->respondWithToken($token), 'ACCESS TOKEN JWT');
+        return json($this->respondWithToken($token, new StudentResource($student)), 'ACCESS TOKEN JWT');
     }
 
     public function loginAdmin(LoginRequest $request): JsonResponse
@@ -52,12 +52,20 @@ class AuthController extends ApiController
 
         $token = JWTAuth::fromUser($admin);
 
-        return json($this->respondWithToken($token), 'ACCESS TOKEN JWT');
+        return json($this->respondWithToken($token, $admin), 'ACCESS TOKEN JWT');
     }
 
     public function me(): JsonResponse
     {
         return json(['user' => new StudentResource($this->user())]);
+    }
+
+    public function check(): JsonResponse
+    {
+        $user = $this->user();
+
+        if ($user) return json(['user' => new StudentResource($user)]);
+        return jsonError('Acesso não autorizado!', ['user' => null]);
     }
 
     public function logout()
@@ -72,12 +80,12 @@ class AuthController extends ApiController
         return json([], 'Logout efetuado com sucesso');
     }
 
-    public function respondWithToken($token): array
+    public function respondWithToken(string $token, StudentResource $user): array
     {
         return [
-            'access_token' => $token,
+            'token' => $token,
             'token_type' => 'bearer',
-            'user' => $this->user()
+            'user' => $user
             #'expires_in' => Auth::factory()->getTTL() * 60
         ];
     }

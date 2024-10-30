@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use DateTime;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,10 +38,24 @@ class ClassInformation extends Model
         return $this->belongsTo(Shift::class);
     }
 
-    public function getClassByDay(User $user, DateTime $forDay = null): Collection
+
+    protected function startTime(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Carbon::createFromFormat('H:i:s', $value)->format('H:i'),
+        );
+    }
+
+    protected function endTime(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Carbon::createFromFormat('H:i:s', $value)->format('H:i'),
+        );
+    }
+
+    public function getTodayClass(User $user): Collection
     {
         $date = new DateTime('now');
-        if($forDay) $date = $forDay;
         
         $weekDay = $date->format('l');
 
@@ -69,6 +85,24 @@ class ClassInformation extends Model
 
 
         return $this->where('day', $today)
+            ->where('course_id', $course_id)
+            ->where('semester', $semester)
+            ->where('shift_id', $shift_id)
+            ->get();
+    }
+
+
+    public function getByDay(User $user, string|null $day): Collection
+    {
+        if($day == null){
+            return $this->getTodayClass($user);
+        }
+
+        $course_id = (int)$user->course_id;
+        $semester = (int)$user->semester;
+        $shift_id = (int)$user->shift_id;
+
+        return $this->where('day', $day)
             ->where('course_id', $course_id)
             ->where('semester', $semester)
             ->where('shift_id', $shift_id)

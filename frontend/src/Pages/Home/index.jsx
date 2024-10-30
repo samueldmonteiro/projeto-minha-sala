@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { PageContainer, TitleOne } from '../../globals/styles'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,20 +8,77 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { ClassInformationBlock, ClassInformationContainer, Date, MoreInformations, MoreInformationsItem, PaginationControl, Room, Subject, Time } from './styles';
 import Pagination from '@mui/material/Pagination';
+import { getByDay, getTodayClass } from '../../Services/ClassService';
+import LoadPage from '../../Components/LoadPage';
+import { useLocation } from 'react-router-dom';
 
-function createData(name, value) {
-    return { name, value };
+function getTodayDate() {
+    const today = new window.Date();
+    return today.toLocaleDateString("pt-BR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+    });
 }
 
-const rows = [
-    createData('Matérias Hoje', 1),
-    createData('Bloco', 'A'),
-    createData('Piso', 4),
-    createData('Professor', 'Roberto Pimentel'),
-];
-
-
 const Home = () => {
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const searchDay = queryParams.get('dia');
+
+    const [loadingHome, setLoadingHome] = useState(true);
+    const [error, setError] = useState(false);
+
+    const [classData, setClassData] = useState([]);
+    const [currentClassIndex, setCurrentClassIndex] = useState(0);
+
+    const nextClass = (event, value) => {
+        setCurrentClassIndex((prevIndex) => (prevIndex + 1) % classData.length);
+    };
+
+    const currentClass = classData[currentClassIndex];
+
+    useEffect(() => {
+        if (!searchDay) {
+            getTodayClass().then(resp => {
+                if (!resp.status) {
+                    setLoadingHome(false);
+                    setError(true);
+                } else {
+                    setClassData(resp.data);
+                    console.log(resp.data[0])
+                }
+                setLoadingHome(false);
+
+            });
+        } else {
+            getByDay(searchDay).then(resp => {
+                if (!resp.status) {
+                    setLoadingHome(false);
+                    setError(true);
+                } else {
+                    setClassData(resp.data);
+                    console.log(resp.data[0])
+
+                }
+                setLoadingHome(false);
+
+            });
+        }
+
+    }, []);
+
+    if (loadingHome) return (<LoadPage open={loadingHome} />);
+
+    if (error) return (
+        <PageContainer>
+            <ClassInformationContainer>
+                <TitleOne>Houve um erro ao buscar informações</TitleOne>
+                <TitleOne>Atualize a página!</TitleOne>
+            </ClassInformationContainer>
+        </PageContainer>
+    )
     return (
         <>
             <PageContainer>
@@ -29,23 +86,23 @@ const Home = () => {
                     <TitleOne>Horário:</TitleOne>
                     <ClassInformationBlock>
                         <Time>
-                            08:00 - 09:40
+                            {currentClass.start_time} - {currentClass.end_time}
                         </Time>
 
                         <Date>
-                            Terça, 17 de Setembro
+                            {!searchDay && getTodayDate()}
                         </Date>
 
                         <Room>
-                            SALA: <span>412</span>
+                            SALA: <span>{currentClass.room}</span>
                         </Room>
 
                         <Subject>
-                            Matéria: Rede de Computadores
+                            Matéria: {currentClass.subject}
                         </Subject>
 
                         <PaginationControl>
-                            <Pagination count={1} variant="outlined" color='primary'/>
+                            <Pagination count={classData.length} variant="outlined" color='primary' onChange={nextClass}/>
                         </PaginationControl>
 
 
@@ -55,18 +112,36 @@ const Home = () => {
                                     <Table aria-label="simple table">
 
                                         <TableBody>
-                                            {rows.map((row) => (
-                                                <TableRow
-                                                    key={row.name}
-                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                >
-                                                    <TableCell component="th" scope="row">
-                                                        {row.name}
-                                                    </TableCell>
-                                                    <TableCell align="right">{row.value}</TableCell>
+                                            <TableRow
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    Bloco
+                                                </TableCell>
+                                                <TableCell align="right">{currentClass.block}</TableCell>
 
-                                                </TableRow>
-                                            ))}
+                                            </TableRow>
+
+                                            <TableRow
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    Piso
+                                                </TableCell>
+                                                <TableCell align="right">{currentClass.floor}</TableCell>
+
+                                            </TableRow>
+
+                                            <TableRow
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    Professor
+                                                </TableCell>
+                                                <TableCell align="right">{currentClass.teacher_name}</TableCell>
+
+                                            </TableRow>
+
                                         </TableBody>
                                     </Table>
                                 </TableContainer>

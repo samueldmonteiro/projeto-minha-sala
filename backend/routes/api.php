@@ -24,17 +24,19 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::post('register/student', [StudentController::class, 'store'])->name('register.student');
 
         Route::get('me', 'me')->name('me')->middleware('authenticated');
+        Route::get('check', 'check')->name('check');
+
         Route::get('logout', 'logout')->name('logout')->middleware('authenticated');
     });
-
 
     // class information
     Route::controller(ClassInformationController::class)->prefix('class_informations')->name('class_informations.')
         ->middleware('authenticated')->group(function () {
 
             Route::get('/today', 'today')->name('today');
-        });
+            Route::post('/getByDay', 'getByDay')->name('getByDay');
 
+        });
 
     // admin
     Route::controller(AdminController::class)

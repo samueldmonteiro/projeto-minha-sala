@@ -13,9 +13,6 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        Admin::create([
-            'user_id' => 3
-        ]);
 
     }
 }

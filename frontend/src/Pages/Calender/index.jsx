@@ -15,6 +15,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import ErrorIcon from '@mui/icons-material/Error';
+import { useNavigate } from 'react-router-dom';
 
 dayjs.locale('pt-br');
 
@@ -26,20 +27,23 @@ const Calender = () => {
 
     const [openErrorModal, setOpenErrorModal] = useState(false);
     const [currentDay, setCurrentDay] = useState(dayjs());
+    const navigate = useNavigate();
 
     const minDate = dayjs().subtract(0, 'week');
     const maxDate = dayjs().add(1, 'week');
 
     const handleSelectedDay = () => {
 
-        const blockedDays = ['domingo'];
+        const blockedDays = ['domingo', 'sábado'];
         const selectedDay = currentDay.format('dddd');
+        const capitalizedDay = currentDay.format('dddd').charAt(0).toUpperCase() + currentDay.format('dddd').slice(1);
 
         if (blockedDays.includes(selectedDay)) {
             setOpenErrorModal(true);
+            return;
         }
 
-        console.log(selectedDay);
+        navigate(`/?dia=${capitalizedDay}`);
     }
 
     return (

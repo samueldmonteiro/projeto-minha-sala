@@ -16,12 +16,15 @@ import { SignInPage } from '@toolpad/core/SignInPage';
 import { useTheme } from '@mui/material/styles';
 import { PageContainer } from '../../../globals/styles';
 import { LoginContainer } from './styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Validation from './Validation';
 import Header from '../../../Components/Auth/Header';
+import useAuth from '../../../Hooks/useAuth'
+import LoadingButton from '@mui/lab/LoadingButton';
+
 
 const providers = [{ id: 'credentials', name: 'Email and Password' }];
 
@@ -116,6 +119,7 @@ function CustomButton() {
     );
 }
 
+
 function SignUpLink() {
     return (
         <Link to="/cadastrar" variant="body2" color={'secondary'}>
@@ -147,12 +151,29 @@ const TranslatePage = () => {
     });
 }
 
+
+function ButtonLoading() {
+    return (
+        <LoadingButton
+            color="secondary"
+            loading={true}
+            loadingPosition="start"
+            variant="contained"
+            type="submit"
+            size="small"
+            disableElevation
+            fullWidth
+            sx={{ my: 2 }}
+        >
+            Entrar
+        </LoadingButton>)
+}
+
+
 export default function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(Validation),
     });
-
-    const [loginError, setLoginError] = useState(false);
 
     useEffect(() => {
         TranslatePage();
@@ -160,11 +181,27 @@ export default function Login() {
 
     const theme = useTheme();
 
-    const onSubmit = (formData) => {
-        setLoginError(false);
+    const { login, isLogged } = useAuth();
+    const [loginError, setLoginError] = useState(false);
+    const [loadingLogin, setLoadingLogin] = useState(false);
 
-        setLoginError(true);
-        console.log(JSON.stringify(formData.get('password')));
+    const navigate = useNavigate();
+
+    const onSubmit = async (formData) => {
+        setLoginError(false);
+        setLoadingLogin(true);
+
+        const result = await login(formData.get('email'), formData.get('password'));
+        setLoadingLogin(false);
+
+
+        if (!result.status) {
+            setLoginError(true);
+        } else {
+            navigate('/');
+        }
+
+        console.log(result);
     };
 
     return (
@@ -181,7 +218,7 @@ export default function Login() {
                             slots={{
                                 emailField: (props) => <CustomEmailField loginError={loginError} {...props} register={register} errors={errors} />,
                                 passwordField: (props) => <CustomPasswordField {...props} register={register} errors={errors} />,
-                                submitButton: CustomButton,
+                                submitButton: loadingLogin ? ButtonLoading : CustomButton,
                                 signUpLink: SignUpLink,
                                 forgotPasswordLink: ForgotPasswordLink,
                             }}

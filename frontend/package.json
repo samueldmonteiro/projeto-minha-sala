@@ -19,6 +19,7 @@
     "@mui/material": "^6.1.5",
     "@mui/x-date-pickers": "^7.22.0",
     "@toolpad/core": "^0.8.1",
+    "axios": "^1.7.7",
     "dayjs": "^1.11.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

@@ -22,5 +22,12 @@ class StudentSeeder extends Seeder
             'shift_id' => 1,
             'semester' => 4
         ]);
+
+        Student::create([
+            'course_id' => 1,
+            'user_id' => 3,
+            'shift_id' => 1,
+            'semester' => 4
+        ]);
     }
 }
