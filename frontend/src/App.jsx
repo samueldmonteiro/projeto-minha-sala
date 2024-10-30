@@ -7,10 +7,10 @@ import Home from "./Pages/Home"
 import About from "./Pages/About"
 import Login from "./Pages/Auth/Login"
 import ForgotPassword from "./Pages/Auth/ForgotPassword"
-import Register from "./Pages/Auth/Register"
 import Calender from "./Pages/Calender"
 import { AuthProvider } from "./Context/AuthContext"
 import PrivateRoute from "./Routes/PrivateRoute"
+import Register from "./Pages/Auth/Register/index.jsx"
 
 const theme = createTheme({
     palette: {
