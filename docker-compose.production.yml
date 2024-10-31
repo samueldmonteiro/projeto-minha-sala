@@ -1,5 +1,5 @@
 services:
-  
+
   backend:
     container_name: backend
 
@@ -9,15 +9,16 @@ services:
       args:
         UID: ${UID}
         USER: ${USER}
-      
+
     volumes:
       - ./backend:/var/www/html
 
     depends_on:
       - db
+      - redis
     networks:
-      - mini-instagram
-    
+      - minha_sala_anhanguera
+
     command: |
       bash -c "[ ! -d 'vendor' ] && composer install && php artisan serve --host=0.0.0.0 --port=8000 || php artisan serve --host=0.0.0.0 --port=8000"
 
@@ -40,12 +41,9 @@ services:
     command: |
       bash -c "[ ! -d 'node_modules' ] && yarn install && yarn build && yarn preview --host 0.0.0.0 --port 5173 || yarn preview --host 0.0.0.0 --port 5173"
 
-    depends_on:
-      - backend
-
     networks:
-      - mini-instagram
-    
+      - minha_sala_anhanguera
+
     ports:
       - "127.0.0.1:5173:5173"
 
@@ -60,16 +58,28 @@ services:
     environment:
       - MYSQL_DATABASE=${DB_DATABASE}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-    
+
     networks:
-      - mini-instagram
-      
+      - minha_sala_anhanguera
+
     ports:
       - "127.0.0.1:3306:3306"
 
+  redis:
+    image: redis:7.4.1
+    container_name: redis_server
+    ports:
+      - "6379:6379" # Mapeia a porta 6379 do Redis
+    volumes:
+      - redis_data:/data # Monta o volume para persistência de dados
+    restart: always # Reinicia automaticamente caso o container pare
+    networks:
+      - minha_sala_anhanguera
+
 networks:
-  mini-instagram:
+  minha_sala_anhanguera:
     driver: bridge
 
 volumes:
   db_data:
+  redis_data:
