@@ -14,6 +14,7 @@ class ClassInformationController extends ApiController
         $classInformation = (new ClassInformation())->getTodayClass($this->user());
         return json($classInformation);
     }
+    
 
     public function getByDay(Request $request): JsonResponse
     {

@@ -11,6 +11,7 @@ import Calender from "./Pages/Calender"
 import { AuthProvider } from "./Context/AuthContext"
 import PrivateRoute from "./Routes/PrivateRoute"
 import Register from "./Pages/Auth/Register/index.jsx"
+import Profile from "./Pages/User/Profile/index.jsx"
 
 const theme = createTheme({
     palette: {
@@ -65,6 +66,8 @@ function Main() {
                         <Route path="/cadastrar" element={<Register />} />
                         <Route path="/esqueceu" element={<ForgotPassword />} />
                         <Route path="/calendario" element={<PrivateRoute><Calender /></PrivateRoute>} />
+
+                        <Route path="/perfil" element={<PrivateRoute><Profile /></PrivateRoute>} />
 
                     </Routes>
                 </AuthProvider>

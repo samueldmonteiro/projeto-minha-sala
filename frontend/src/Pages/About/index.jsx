@@ -11,12 +11,12 @@ import PixIcon from '@mui/icons-material/Pix';
 
 
 const persons = [
-    { name: 'Samuel Davi', position: 'Programador Full-Stack', image: UserImage, link: 'http://google.com' },
-    { name: 'Luís Gustavo', position: 'Designer', image: '', link: 'http://google.com' },
+    { name: 'Profº Roberto Pimentel', position: 'Co-ordenador', image: '', link: 'http://google.com' },
+    { name: 'Samuel Davi', position: 'Programador', image: UserImage, link: 'http://google.com' },
+    { name: 'Luís Gustavo', position: 'Editor e Designer', image: '', link: 'http://google.com' },
     { name: 'Erick Mendes', position: 'Editor e Designer', image: '', link: 'http://google.com' },
     { name: 'Pedro Henrick', position: 'Analista de Dados', image: '', link: 'http://google.com' },
 ];
-
 
 const About = () => {
     return (
@@ -32,7 +32,7 @@ const About = () => {
             </Description>
 
             <SectionContainer>
-                <TitleOne><Diversity3Icon /> Alunos Responsáveis.</TitleOne>
+                <TitleOne><Diversity3Icon /> Responsáveis.</TitleOne>
 
                 <PersonCardContainer>
                     {persons.map((person, i) => (

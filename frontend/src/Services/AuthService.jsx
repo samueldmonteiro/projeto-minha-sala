@@ -13,7 +13,6 @@ export const CheckAuthentication = async () => {
 
 
 export const loginStudent = async (email, password) => {
-
     try {
         const resp = await api.post('/auth/login/student', { email, password });
 

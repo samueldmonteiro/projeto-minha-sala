@@ -73,7 +73,7 @@ class ClassInformationSeeder extends Seeder
             'course_id' => 1,
             'shift_id' => 1,
             'semester' => 4,
-            'room' => 419,
+            'room' => 712,
             'block' => 'A',
             'floor' => 4,
             'day' => 'Quinta-feira',

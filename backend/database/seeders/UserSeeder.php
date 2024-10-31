@@ -33,6 +33,7 @@ class UserSeeder extends Seeder
             'email' => 'samuel@email.com',
             'password' => Hash::make('4321'),
             'type' => 'student',
+            'avatar' => 'users/avatar/233233211.jpg',
             'blocked' => false
         ]);
     }

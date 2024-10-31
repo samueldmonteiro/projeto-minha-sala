@@ -10,11 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class JWTBlacklisted
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
         $check = (new JWTBlacklistService)->isBlacklisted(JWTAuth::getToken());

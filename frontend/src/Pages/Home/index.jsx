@@ -10,7 +10,6 @@ import { ClassInformationBlock, ClassInformationContainer, Date, MoreInformation
 import Pagination from '@mui/material/Pagination';
 import { getByDay, getTodayClass } from '../../Services/ClassService';
 import LoadPage from '../../Components/LoadPage';
-import useAuth from '../../Hooks/useAuth';
 
 import { useLocation } from 'react-router-dom';
 
@@ -41,38 +40,32 @@ const Home = () => {
 
     const currentClass = classData[currentClassIndex];
 
-    const {user} = useAuth();
-    console.log(user);
+    const getInformationClass = async (searchEngine, query = null) => {
+        searchEngine(query).then(resp => {
+            if (!resp.status) {
+                setLoadingHome(false);
+                setError(true);
+            } else {
+                setClassData(resp.data);
+                console.log(resp.data[0])
+            }
+            setLoadingHome(false);
+        });
+    }
 
     useEffect(() => {
-        if (!searchDay) {
-            getTodayClass().then(resp => {
-                if (!resp.status) {
-                    setLoadingHome(false);
-                    setError(true);
-                } else {
-                    setClassData(resp.data);
-                    console.log(resp.data[0])
-                }
-                setLoadingHome(false);
 
-            });
-        } else {
-            getByDay(searchDay).then(resp => {
-                if (!resp.status) {
-                    setLoadingHome(false);
-                    setError(true);
-                } else {
-                    setClassData(resp.data);
-                    console.log(resp.data[0])
+        const searchEngine = searchDay ? getByDay : getTodayClass;
 
-                }
-                setLoadingHome(false);
+        getInformationClass(searchEngine, searchDay);
 
-            });
-        }
+        const intervalId = setInterval(() => {
+            getInformationClass(searchEngine, searchDay);
+        }, 6000);
 
-    }, []);
+        return () => clearInterval(intervalId);
+
+    }, [searchDay, getTodayClass, getByDay]);
 
     if (loadingHome) return (<LoadPage open={loadingHome} />);
 
@@ -107,7 +100,7 @@ const Home = () => {
                         </Subject>
 
                         <PaginationControl>
-                            <Pagination count={classData.length} variant="outlined" color='primary' onChange={nextClass}/>
+                            <Pagination count={classData.length} variant="outlined" color='primary' onChange={nextClass} />
                         </PaginationControl>
 
 

@@ -47,7 +47,7 @@ const UserIconMenu = () => {
 
     return (
         <>
-            <Avatar src={UserImage} sx={{ width: 36, height: 36 }} id="basic-button"
+            <Avatar src={user.avatar} sx={{ width: 36, height: 36 }} id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
@@ -63,7 +63,7 @@ const UserIconMenu = () => {
                 }}
             >
                 <NavLinks>
-                    <Link to="/">
+                    <Link to="/perfil">
                         <MenuItem onClick={handleClose}><AccountCircleIcon />Meu Perfil</MenuItem>
                     </Link>
                     <Link to="/">
