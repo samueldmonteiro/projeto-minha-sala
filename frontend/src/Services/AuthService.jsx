@@ -1,6 +1,5 @@
 import api from "./api"
 
-
 export const CheckAuthentication = async () => {
     try {
         const resp = await api.get('/auth/check');
@@ -10,7 +9,6 @@ export const CheckAuthentication = async () => {
         return { check: false, user: null }
     }
 }
-
 
 export const loginStudent = async (email, password) => {
     try {
@@ -22,7 +20,6 @@ export const loginStudent = async (email, password) => {
         return error.response.data;
     }
 }
-
 
 export const registerStudent = async (data) => {
     try {

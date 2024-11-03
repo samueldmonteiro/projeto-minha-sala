@@ -15,6 +15,9 @@ import { useLocation } from 'react-router-dom';
 
 function getTodayDate() {
     const today = new window.Date();
+
+    if (today.getDay() === 0) today.setDate(today.getDate() + 1); 
+    
     return today.toLocaleDateString("pt-BR", {
         weekday: "long",
         day: "numeric",

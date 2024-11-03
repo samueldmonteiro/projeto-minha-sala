@@ -11,7 +11,6 @@ export const getTodayClass = async () => {
     }
 }
 
-
 export const getByDay = async (day) => {
 
     try {
