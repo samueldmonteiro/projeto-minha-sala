@@ -2,17 +2,20 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Repositories\AdminRepository;
 use Illuminate\Database\Seeder;
 
 class AdminSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
+        $adminRepository = app(AdminRepository::class);
 
+        $adminRepository->create([
+            'name' => 'adm_01',
+            'email' => 'samuel.dvmonteiro@gmail.com',
+            'password' => '4321'
+        ]);
     }
 }

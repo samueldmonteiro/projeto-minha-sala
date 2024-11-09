@@ -2,32 +2,20 @@
 
 namespace Database\Seeders;
 
-use App\Models\Student;
+use App\Repositories\StudentRepository;
 use Illuminate\Database\Seeder;
 
 class StudentSeeder extends Seeder
 {
     public function run(): void
     {
-        Student::create([
-            'course_id' => 1,
-            'user_id' => 1,
-            'shift_id' => 1,
-            'semester' => 4
-        ]);
+        $studentRepository = app(StudentRepository::class);
 
-        Student::create([
-            'course_id' => 1,
-            'user_id' => 2,
-            'shift_id' => 1,
-            'semester' => 4
-        ]);
-
-        Student::create([
-            'course_id' => 1,
-            'user_id' => 3,
-            'shift_id' => 1,
-            'semester' => 4
-        ]);
+        $studentRepository->create([
+            'name' => 'Samuel Davi',
+            'RA' => '9828228819',
+            'semester' => 4,
+            'course_id' => 1
+        ]); 
     }
 }

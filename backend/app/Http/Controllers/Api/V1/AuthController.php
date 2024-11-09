@@ -2,91 +2,65 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Requests\LoginRequest;
-use App\Http\Resources\StudentResource;
-use App\Models\Admin;
-use App\Models\Student;
-use App\Services\JWTBlacklistService;
+use App\Exceptions\AdminLoginException;
+use App\Exceptions\AdminNotFoundException;
+use App\Exceptions\RANotFoundException;
+use App\Exceptions\StudentLoginException;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminLoginRequest;
+use App\Http\Requests\StudentLoginRequest;
+use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class AuthController extends ApiController
+class AuthController extends Controller
 {
-    protected JWTBlacklistService $blacklistService;
+    public function __construct(protected AuthService $authService) {}
 
-    public function __construct()
+    public function loginStudent(StudentLoginRequest $request): JsonResponse
     {
-        $this->blacklistService = new JWTBlacklistService();
-    }
+        try {
+            $result = $this->authService->loginStudent($request->RA);
+            return json($result);
 
-    public function loginStudent(LoginRequest $request): JsonResponse
-    {
-
-        $credentials = $request->only('email', 'password');
-
-        $student = Student::whereHas('user', function ($query) use ($credentials) {
-            $query->where('email', $credentials['email']);
-        })->first();
-
-        if (!$student || !Hash::check($credentials['password'], $student->user->password)) {
-            return jsonError('Email e/ou senha incorreto(s)', [], 401);
+        } catch (RANotFoundException $e) {
+            return jsonError('RA não encontrado, efetue o cadastro para Acessar', [], 404);
+        } catch (StudentLoginException $e) {
+            return jsonError('Erro ao registrar, tente novamente!', [], 400);
         }
-
-        $token = JWTAuth::fromUser($student);
-
-        return json($this->respondWithToken($token, new StudentResource($student)), 'ACCESS TOKEN JWT');
     }
 
-    public function loginAdmin(LoginRequest $request): JsonResponse
+    public function loginAdmin(AdminLoginRequest $request): JsonResponse
     {
-        $credentials = $request->only('email', 'password');
 
-        $admin = Admin::whereHas('user', function ($query) use ($credentials) {
-            $query->where('email', $credentials['email']);
-        })->first();
+        try {
+            $result = $this->authService->loginAdmin(
+                $request->email,
+                $request->password
+            );
 
-        if (!$admin || !Hash::check($credentials['password'], $admin->user->password)) {
-            return jsonError('Email e/ou Senha incorreto(s)', [], 401);
+            return json($result);
+            
+        } catch (AdminNotFoundException $e) {
+            return jsonError($e->getMessage());
+        } catch (AdminLoginException $e) {
+            return jsonError($e->getMessage());
         }
-
-        $token = JWTAuth::fromUser($admin);
-
-        return json($this->respondWithToken($token, $admin), 'ACCESS TOKEN JWT');
     }
 
-    public function me(): JsonResponse
+    public function check(Request $r): JsonResponse
     {
-        return json(['user' => new StudentResource($this->user())]);
+        return json(Auth::check());
     }
 
-    public function check(): JsonResponse
+    public function me(Request $r): JsonResponse
     {
-        $user = $this->user();
-
-        if ($user) return json(['user' => new StudentResource($user)]);
-        return jsonError('Acesso não autorizado!', ['user' => null]);
+        return json(Auth::user()->entityResource());
     }
 
-    public function logout()
+    public function logout(): void
     {
-        $token = JWTAuth::getToken();
-        $payload = JWTAuth::getPayload($token);
-
-        $this->blacklistService->addToBlacklist($token, $payload->get('exp'));
-
-        JWTAuth::invalidate($token);
-
-        return json([], 'Logout efetuado com sucesso');
-    }
-
-    public function respondWithToken(string $token, StudentResource $user): array
-    {
-        return [
-            'token' => $token,
-            'token_type' => 'bearer',
-            'user' => $user
-            #'expires_in' => Auth::factory()->getTTL() * 60
-        ];
+        $this->authService->logout();
     }
 }

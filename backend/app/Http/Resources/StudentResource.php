@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class StudentResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         $avatar =  Storage::url($this->user->avatar);
@@ -21,16 +16,13 @@ class StudentResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->user->name,
-            'email' => $this->user->email,
-            'blocked' => $this->user->blocked,
-            'avatar' => $avatar,
-            'type' => $this->user->type,
-            
-            'course' => $this->course,
-            'shift' => $this->shift,
+            'RA' => $this->RA,
             'semester' => $this->semester,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'course' => $this->course->name,
+            'avatar' => $avatar,
+            'blocked' => $this->user->blocked,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

@@ -2,19 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\Course;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Repositories\CourseRepository;
 use Illuminate\Database\Seeder;
 
 class CourseSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        Course::create([
-            'name' => 'Ciência da Computação (M)'
-        ]);
+        $courseRepository = app(CourseRepository::class);
+
+        $courseRepository->create(['name' => 'Ciência da Computação (M)']);
     }
 }

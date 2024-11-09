@@ -2,20 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\ClassInformation;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Repositories\ClassInformationRepository;
 use Illuminate\Database\Seeder;
 
 class ClassInformationSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        ClassInformation::create([
+        $classInformationRepository = app(ClassInformationRepository::class);
+
+        $classInformationRepository->create([
             'course_id' => 1,
-            'shift_id' => 1,
             'semester' => 4,
             'room' => 608,
             'block' => 'B',
@@ -27,9 +24,8 @@ class ClassInformationSeeder extends Seeder
             'subject' => 'Engenharia de Software'
         ]);
 
-        ClassInformation::create([
+        $classInformationRepository->create([
             'course_id' => 1,
-            'shift_id' => 1,
             'semester' => 4,
             'room' => 422,
             'block' => 'A',
@@ -41,9 +37,8 @@ class ClassInformationSeeder extends Seeder
             'subject' => 'Linguagens Formais e automatos'
         ]);
 
-        ClassInformation::create([
+        $classInformationRepository->create([
             'course_id' => 1,
-            'shift_id' => 1,
             'semester' => 4,
             'room' => 413,
             'block' => 'A',
@@ -55,9 +50,8 @@ class ClassInformationSeeder extends Seeder
             'subject' => 'Redes de Computadores'
         ]);
 
-        ClassInformation::create([
+        $classInformationRepository->create([
             'course_id' => 1,
-            'shift_id' => 1,
             'semester' => 4,
             'room' => 807,
             'block' => 'B',
@@ -69,9 +63,8 @@ class ClassInformationSeeder extends Seeder
             'subject' => 'Algorítimo e Estrutura de Dados'
         ]);
 
-        ClassInformation::create([
+        $classInformationRepository->create([
             'course_id' => 1,
-            'shift_id' => 1,
             'semester' => 4,
             'room' => 712,
             'block' => 'A',
@@ -83,9 +76,8 @@ class ClassInformationSeeder extends Seeder
             'subject' => 'Segurança da Informação e de Redes'
         ]);
 
-        ClassInformation::create([
+        $classInformationRepository->create([
             'course_id' => 1,
-            'shift_id' => 1,
             'semester' => 4,
             'room' => 422,
             'block' => 'A',

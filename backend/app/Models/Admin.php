@@ -2,43 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class Admin extends User
+class Admin extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'user_id',
+        'email',
+        'password'
     ];
 
-    public function user()
+    public function user(): MorphOne
     {
-        return $this->belongsTo(User::class);
+        return $this->morphOne(User::class, 'entity');
     }
-
-    protected function name(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => $this->user->name,
-        );
-    }
-
-
-    protected function email(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => $this->user->email,
-        );
-    }
-
-    protected function password(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->user->password,
-        );
-    }
-
 }

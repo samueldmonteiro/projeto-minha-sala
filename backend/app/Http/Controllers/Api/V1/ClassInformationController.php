@@ -2,77 +2,44 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\ClassInformation;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ClassInformationGetByDayRequest;
+use App\Services\ClassInformationService;
+use App\Services\UserVisitService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
-class ClassInformationController extends ApiController
+class ClassInformationController extends Controller
 {
+    public function __construct(
+        protected ClassInformationService $classInformationService,
+        protected UserVisitService $userVisitService
+    ) {}
+
     public function today(): JsonResponse
     {
-        $classInformation = (new ClassInformation())->getTodayClass($this->user());
-        return json($classInformation);
-    }
-    
+        $this->userVisitService->increaseVisit();
 
-    public function getByDay(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->all(), [
-            'day' => 'required|string|in:Segunda-feira,Terça-feira,Quarta-feira,Quinta-feira,Sexta-feira,Sábado'
-        ]);
-    
-        $day = $request->day;
+        $data = $this->classInformationService->getTodayClass();
 
-        if ($validator->fails()) {
-            $day = null;
+        if($data->isEmpty()) {
+            return jsonError('Não existe aula registrada neste dia', [], 404);
         }
 
-        return json((new ClassInformation())->getByDay($this->user(), $day));
+        return json($data);
     }
 
-    public function create()
+    public function getByDay(ClassInformationGetByDayRequest $request): JsonResponse
     {
-        //
-    }
+        $day = $request->day;
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if(!$day) return $this->today();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ClassInformation $classInformation)
-    {
-        //
-    }
+        $data = $this->classInformationService->getClassByDay($day);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ClassInformation $classInformation)
-    {
-        //
-    }
+        if($data->isEmpty()) {
+            return jsonError('Não existe aula registrada neste dia', [], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ClassInformation $classInformation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ClassInformation $classInformation)
-    {
-        //
+        return json($data);
     }
 }

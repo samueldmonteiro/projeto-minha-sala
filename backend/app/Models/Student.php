@@ -2,54 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class Student extends User
+class Student extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'user_id',
         'course_id',
-        'shift_id',
         'semester',
-
+        'RA',
     ];
 
-    public function user()
+    public function user(): MorphOne
     {
-        return $this->belongsTo(User::class);
+        return $this->morphOne(User::class, 'entity');
     }
 
     public function course()
     {
         return $this->belongsTo(Course::class);
-    }
-
-    public function shift()
-    {
-        return $this->belongsTo(Shift::class);
-    }
-
-    protected function name(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => $this->user->name,
-        );
-    }
-
-    protected function email(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => $this->user->email,
-        );
-    }
-
-    protected function password(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->user->password,
-        );
     }
 }

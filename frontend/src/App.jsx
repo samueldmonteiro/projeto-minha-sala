@@ -12,6 +12,7 @@ import { AuthProvider } from "./Context/AuthContext"
 import PrivateRoute from "./Routes/PrivateRoute"
 import Register from "./Pages/Auth/Register/index.jsx"
 import Profile from "./Pages/User/Profile/index.jsx"
+import UserVisit from "./Pages/Admin/UserVisit/index.jsx"
 
 const theme = createTheme({
     palette: {
@@ -68,6 +69,8 @@ function Main() {
                         <Route path="/calendario" element={<PrivateRoute><Calender /></PrivateRoute>} />
 
                         <Route path="/perfil" element={<PrivateRoute><Profile /></PrivateRoute>} />
+
+                        <Route path="/admin/visitas" element={<PrivateRoute><UserVisit /></PrivateRoute>} />
 
                     </Routes>
                 </AuthProvider>

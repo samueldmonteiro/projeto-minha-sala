@@ -7,7 +7,7 @@ export const getTodayClass = async () => {
         return resp.data;
 
     } catch (error) {
-        return resp.response.data;
+        return error.response.data;
     }
 }
 
@@ -18,7 +18,7 @@ export const getByDay = async (day) => {
         return resp.data;
 
     } catch (error) {
-        return resp.response.data;
+        return error.response.data;
 
     }
 }
