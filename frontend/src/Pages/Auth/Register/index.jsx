@@ -112,6 +112,7 @@ const Register = () => {
                                 InputProps={{
                                     startAdornment: <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />,
                                 }}
+                                type="password"
                             />
                         )}
                     />
