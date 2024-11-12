@@ -3,64 +3,21 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Course;
-use Illuminate\Http\Request;
+use App\Repositories\CourseRepository;
+use Illuminate\Http\JsonResponse;
 
 class CourseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    public function __construct(protected CourseRepository $courseRepository) {}
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function all(): JsonResponse
     {
-        //
-    }
+        $courses = $this->courseRepository->all();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if ($courses->isEmpty()) {
+            return jsonError('Nenhum curso encontrado', [], 'error', 404);
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Course $course)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Course $course)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Course $course)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Course $course)
-    {
-        //
+        return json($courses);
     }
 }

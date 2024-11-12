@@ -10,7 +10,7 @@ abstract class AbstractRepository implements RepositoryInterface
 {
     public function __construct(protected Model $model) {}
 
-    public function all(): Collection|array
+    public function all(): Collection
     {
         return $this->model->all();
     }

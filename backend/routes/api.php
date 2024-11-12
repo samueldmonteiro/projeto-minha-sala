@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ClassInformationController;
+use App\Http\Controllers\Api\V1\CourseController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\UserVisitController;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +53,12 @@ Route::prefix('v1')->group(function () {
 
     // User Visit
     Route::middleware('auth:user')->prefix('visits')->controller(UserVisitController::class)->name('userVists.')->group(function () {
+
+        Route::get('all', 'all')->name('all');
+    });
+
+    // Course
+    Route::prefix('course')->controller(CourseController::class)->name('course.')->group(function () {
 
         Route::get('all', 'all')->name('all');
     });

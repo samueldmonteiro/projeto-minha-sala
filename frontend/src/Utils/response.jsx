@@ -1,6 +1,6 @@
 
 
-const response = (status, data = null, message, statusCode = 400, type = 'error') => {
+const response = (status, data = null, message, statusCode = 200, type = 'error') => {
 
     return {
         data,

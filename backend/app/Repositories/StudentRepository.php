@@ -28,7 +28,7 @@ class StudentRepository extends AbstractRepository implements RepositoryInterfac
 
             $user = $this->userRepository->make([
                 'name' => $data['name'],
-                'type' => $data['type'],
+                'type' => 'student',
             ]);
 
             $student->user()->save($user);

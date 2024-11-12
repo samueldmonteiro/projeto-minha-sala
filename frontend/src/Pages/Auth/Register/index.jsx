@@ -1,51 +1,73 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PageContainer, TitleOne } from '../../../globals/styles';
 import Header from '../../../Components/Auth/Header';
-import { MessageContainer, RegisterForm, SelectInputs } from './styles';
+import {RegisterForm, SelectInputs } from './styles';
 import TextField from '@mui/material/TextField';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import EmailIcon from '@mui/icons-material/Email';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Button, Alert } from '@mui/material';
 import validation from './validation';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Key as KeyIcon } from '@mui/icons-material';
+import { getAllCourses } from '../../../Services/Course/GeneralService';
+import useMessage from '../../../Hooks/useMessage';
+import { registerRequest } from '../../../Services/Student/AuthService';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { LinkArea } from '../Login/styles';
+import useAuth from '../../../Hooks/useAuth';
 
-const courses = ['Ciência da Computação (M)'];
-const shifts = ['Matutino'];
-const semesters = ['4'];
-
+const semesters = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'];
 
 const Register = () => {
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(validation),
-        defaultValues: {  // Definindo valores padrão
+        defaultValues: {
             name: '',
-            email: '',
-            password: '',
+            RA: '',
             course: '',
             semester: '',
-            shift: '',
         }
     });
 
-    const [error, setError] = useState(null);
+    const { Message, setMessage } = useMessage();
+    const [loadingRegister, setLoadingRegister] = useState(false);
+    const [courses, setCourses] = useState([]);
+    const { login } = useAuth();
     const navigate = useNavigate();
 
-  
+    useEffect(() => {
+
+        const handleOptionCourses = async () => {
+
+            const coursesData = await getAllCourses();
+            let courseList = [];
+            coursesData.data.map(course => {
+                courseList.push(course.name);
+            });
+            setCourses(courseList)
+        }
+
+        handleOptionCourses();
+    }, [])
+
     const onSubmit = async (data) => {
 
-        const result = await registerStudent(data);
-        console.log(result);
-        if(!result.status){
-            setError(result.message);
+        setLoadingRegister(true);
+        const resp = await registerRequest(
+            data.name, data.RA,
+            data.course, data.semester
+        );
+        setLoadingRegister(false);
+
+        if (resp.error) {
+            setMessage(resp.message, resp.type);
             return;
         }
 
-        localStorage.setItem('token', result.data.token);
+        setMessage(resp.message, 'success');
+        login(resp.data.token, resp.data.user);
         navigate('/');
     };
 
@@ -55,9 +77,7 @@ const Register = () => {
             <PageContainer>
                 <RegisterForm onSubmit={handleSubmit(onSubmit)}>
                     <TitleOne><PersonAddIcon /> Crie sua Conta</TitleOne>
-                    {error && <MessageContainer>
-                        <Alert severity="warning">{error}</Alert>
-                    </MessageContainer>}
+                    {Message}
                     <Controller
                         name="name"
                         required
@@ -77,42 +97,24 @@ const Register = () => {
                     />
 
                     <Controller
-                        name="email"
+                        name="RA"
+                        required
                         control={control}
                         render={({ field }) => (
                             <TextField
-
                                 {...field}
-                                label="E-mail"
-                                type="email"
-                                error={!!errors.email}
-                                helperText={errors.email?.message}
+                                label="RA do aluno"
+                                error={!!errors.RA}
+                                placeholder="RA"
+                                helperText={errors.RA?.message}
                                 sx={{ marginBottom: '23px' }}
                                 InputProps={{
-                                    startAdornment: <EmailIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />,
+                                    startAdornment: <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />,
                                 }}
                             />
                         )}
                     />
 
-                    <Controller
-                        name="password"
-                        control={control}
-                        render={({ field }) => (
-                            <TextField
-
-                                {...field}
-                                label="Senha"
-                                type="password"
-                                error={!!errors.password}
-                                helperText={errors.password?.message}
-                                sx={{ marginBottom: '23px' }}
-                                InputProps={{
-                                    startAdornment: <VpnKeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />,
-                                }}
-                            />
-                        )}
-                    />
                     <SelectInputs>
                         <Controller
                             name="course"
@@ -160,33 +162,16 @@ const Register = () => {
                             )}
                         />
 
-                        <Controller
-                            name="shift"
-                            control={control}
-                            render={({ field }) => (
-                                <Autocomplete
-
-                                    required
-                                    {...field}
-                                    options={shifts}
-                                    onChange={(_, data) => field.onChange(data)}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Turno"
-                                            error={!!errors.shift}
-                                            helperText={errors.shift?.message}
-                                        />
-                                    )}
-                                    sx={{ marginBottom: '23px' }}
-                                />
-                            )}
-                        />
                     </SelectInputs>
 
-                    <Button color='primary' sx={{ width: '100%' }} type="submit" variant='contained'>
-                        Cadastrar
-                    </Button>
+                    <LoadingButton loading={loadingRegister}
+                        color='primary' sx={{ width: '100%' }} type="submit" variant='contained'>Entrar</LoadingButton>
+
+                    <LinkArea>
+                        <Link to="/entrar">
+                            Já tenho uma conta.
+                        </Link>
+                    </LinkArea>
                 </RegisterForm>
             </PageContainer>
         </>
