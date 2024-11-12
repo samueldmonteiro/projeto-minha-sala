@@ -12,7 +12,7 @@ import PixIcon from '@mui/icons-material/Pix';
 
 const persons = [
     { name: 'Profº Roberto Pimentel', position: 'Co-ordenador', image: '', link: 'http://google.com' },
-    { name: 'Samuel Davi', position: 'Programador', image: UserImage, link: 'http://google.com' },
+    { name: 'Samuel Davi', position: 'Programador', image: UserImage, link: 'https://www.linkedin.com/in/samuel-m-4a4432250' },
     { name: 'Luís Gustavo', position: 'Editor e Designer', image: '', link: 'http://google.com' },
     { name: 'Erick Mendes', position: 'Editor e Designer', image: '', link: 'http://google.com' },
     { name: 'Pedro Henrick', position: 'Analista de Dados', image: '', link: 'http://google.com' },

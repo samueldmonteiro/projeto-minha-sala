@@ -13,7 +13,7 @@ class StudentSeeder extends Seeder
 
         $studentRepository->create([
             'name' => 'Samuel Davi',
-            'RA' => '9828228819',
+            'RA' => '125644367749',
             'semester' => 4,
             'course_id' => 1,
             'type' => 'student'

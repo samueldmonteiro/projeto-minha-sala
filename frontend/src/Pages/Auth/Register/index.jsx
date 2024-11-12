@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PageContainer, TitleOne } from '../../../globals/styles';
 import Header from '../../../Components/Auth/Header';
-import {RegisterForm, SelectInputs } from './styles';
+import { RegisterForm, SelectInputs } from './styles';
 import TextField from '@mui/material/TextField';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -18,7 +18,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { LinkArea } from '../Login/styles';
 import useAuth from '../../../Hooks/useAuth';
 
-const semesters = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'];
+//const semesters = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'];
+const semesters = ['2', '4'];
 
 const Register = () => {
     const { control, handleSubmit, formState: { errors } } = useForm({

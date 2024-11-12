@@ -30,7 +30,7 @@ const UserVisit = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Name</TableCell>
-                            <TableCell>Email</TableCell>
+                            <TableCell>RA</TableCell>
                             <TableCell>Últim. visita</TableCell>
                             <TableCell>QT. visitas</TableCell>
                         </TableRow>
@@ -39,9 +39,9 @@ const UserVisit = () => {
                         {data.map((visit, index) => (
                             <TableRow key={index}>
                                 <TableCell>{visit.user.name}</TableCell>
-                                <TableCell>{visit.user.email}</TableCell>
-                                <TableCell>{visit.visit.last_visit}</TableCell>
-                                <TableCell>{visit.visit.total_visits}</TableCell>
+                                <TableCell>{visit.user.RA}</TableCell>
+                                <TableCell>{visit.last_visit}</TableCell>
+                                <TableCell>{visit.total_visits}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

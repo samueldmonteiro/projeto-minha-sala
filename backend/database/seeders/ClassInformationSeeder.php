@@ -88,5 +88,46 @@ class ClassInformationSeeder extends Seeder
             'end_time' => '09:40:00',
             'subject' => 'Sistemas Digitais e Microprocessadores'
         ]);
+
+        //enfermagem
+
+        $classInformationRepository->create([
+            'course_id' => 2,
+            'semester' => 2,
+            'room' => 606,
+            'block' => 'B',
+            'floor' => 2,
+            'day' => 'Terça-feira',
+            'teacher_name' => 'Fernanda Oliveira Sousa',
+            'start_time' => '08:00:00',
+            'end_time' => '10:50:00',
+            'subject' => 'Introdução à Biologia Celular e Desenvolvimento'
+        ]);
+
+        $classInformationRepository->create([
+            'course_id' => 2,
+            'semester' => 2,
+            'room' => 812,
+            'block' => 'B',
+            'floor' => 4,
+            'day' => 'Quarta-feira',
+            'teacher_name' => 'Andressa Almeida Santana Dias',
+            'start_time' => '08:00:00',
+            'end_time' => '10:50:00',
+            'subject' => 'Cien. Morfofuncionais dos Sistemas Imune e Hematologico'
+        ]);
+
+        $classInformationRepository->create([
+            'course_id' => 2,
+            'semester' => 2,
+            'room' => 805,
+            'block' => 'B',
+            'floor' => 4,
+            'day' => 'Sexta-feira',
+            'teacher_name' => 'Anan Cristina Lira de Menezes',
+            'start_time' => '08:00:00',
+            'end_time' => '10:50:00',
+            'subject' => 'Microbiologia'
+        ]);
     }
 }

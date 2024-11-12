@@ -2,7 +2,7 @@ import api from "./api"
 
 export const getUserVisits = async () => {
     try {
-        const resp = await api.get('logs/visits');
+        const resp = await api.get('visits/all');
         return resp.data;
 
     } catch (error) {

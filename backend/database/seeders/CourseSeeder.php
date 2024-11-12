@@ -12,5 +12,6 @@ class CourseSeeder extends Seeder
         $courseRepository = app(CourseRepository::class);
 
         $courseRepository->create(['name' => 'Ciência da Computação (M)']);
+        $courseRepository->create(['name' => 'Enfermagem (M)']);
     }
 }

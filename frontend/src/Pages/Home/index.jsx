@@ -46,11 +46,19 @@ const Home = () => {
     const getInformationClass = async (searchEngine, query = null) => {
         searchEngine(query).then(resp => {
             console.log(resp)
+
+            if(resp.statusCode == 404){
+                setLoadingHome(false);
+                setClassNotExists(true);
+                return;
+            }
+
             if(resp.error){
                 setLoadingHome(false);
                 setError(true);
                 return;
             }
+
 
             setClassData(resp.data);
             setLoadingHome(false);
@@ -88,7 +96,7 @@ const Home = () => {
     if (classNotExists) return (
         <PageContainer>
             <ClassInformationContainer>
-                <TitleOne>Não existe aula neste dia</TitleOne>
+                <TitleOne>Você não tem aula neste dia!</TitleOne>
             </ClassInformationContainer>
         </PageContainer>
     )

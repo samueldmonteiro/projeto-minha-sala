@@ -24,7 +24,7 @@ class ClassInformationController extends Controller
 
 
         if ($data->isEmpty()) {
-            return jsonError('Não existe aula registrada neste dia', [], 404);
+            return jsonError('Não existe aula registrada neste dia', [], 'warning', 404);
         }
 
         return json(ClassInformationResource::collection($data));
@@ -39,7 +39,7 @@ class ClassInformationController extends Controller
         $data = $this->classInformationService->getClassByDay($day);
 
         if ($data->isEmpty()) {
-            return jsonError('Não existe aula registrada neste dia', [], 404);
+            return jsonError('Não existe aula registrada neste dia', [], 'warning', 404);
         }
 
         return json(ClassInformationResource::collection($data));
