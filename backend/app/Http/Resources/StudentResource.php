@@ -20,6 +20,7 @@ class StudentResource extends JsonResource
             'semester' => $this->semester,
             'course' => $this->course->name,
             'avatar' => $avatar,
+            'type' => $this->user->type,
             'blocked' => $this->user->blocked,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),

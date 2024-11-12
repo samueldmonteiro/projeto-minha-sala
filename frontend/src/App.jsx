@@ -13,6 +13,7 @@ import PrivateRoute from "./Routes/PrivateRoute"
 import Register from "./Pages/Auth/Register/index.jsx"
 import Profile from "./Pages/User/Profile/index.jsx"
 import UserVisit from "./Pages/Admin/UserVisit/index.jsx"
+import NotFound from './Pages/NotFound/'
 
 const theme = createTheme({
     palette: {
@@ -71,6 +72,9 @@ function Main() {
                         <Route path="/perfil" element={<PrivateRoute><Profile /></PrivateRoute>} />
 
                         <Route path="/admin/visitas" element={<PrivateRoute><UserVisit /></PrivateRoute>} />
+
+                        <Route path="*" element={<PrivateRoute><NotFound /></PrivateRoute>} />
+
 
                     </Routes>
                 </AuthProvider>

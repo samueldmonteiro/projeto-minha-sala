@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Exceptions\AdminLoginException;
-use App\Exceptions\AdminNotFoundException;
-use App\Exceptions\RANotFoundException;
-use App\Exceptions\StudentLoginException;
+use App\Enums\AuthError;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminLoginRequest;
 use App\Http\Requests\StudentLoginRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -20,41 +16,39 @@ class AuthController extends Controller
 
     public function loginStudent(StudentLoginRequest $request): JsonResponse
     {
-        try {
-            $result = $this->authService->loginStudent($request->RA);
-            return json($result);
+        $result = $this->authService->loginStudent($request->RA);
 
-        } catch (RANotFoundException $e) {
-            return jsonError('RA não encontrado, efetue o cadastro para Acessar', [], 404);
-        } catch (StudentLoginException $e) {
-            return jsonError('Erro ao registrar, tente novamente!', [], 400);
+        if (is_array($result)) {
+            return json($result);
         }
+
+        return match ($result) {
+            AuthError::RANotFound => jsonError('RA não identificado!', [], 'warning', 404),
+            default => jsonError('Erro inesperado ao efetuar login')
+        };
     }
 
     public function loginAdmin(AdminLoginRequest $request): JsonResponse
     {
+        $result = $this->authService->loginAdmin(
+            $request->email,
+            $request->password
+        );
 
-        try {
-            $result = $this->authService->loginAdmin(
-                $request->email,
-                $request->password
-            );
+        if (!is_array($result)) return jsonError('Login incorreto');
 
-            return json($result);
-            
-        } catch (AdminNotFoundException $e) {
-            return jsonError($e->getMessage());
-        } catch (AdminLoginException $e) {
-            return jsonError($e->getMessage());
-        }
+        return json($result);
     }
 
-    public function check(Request $r): JsonResponse
+    public function check(): JsonResponse
     {
-        return json(Auth::check());
+        return json([
+            'check' => Auth::check(),
+            'user' => Auth::user()->entityResource()
+        ]);
     }
 
-    public function me(Request $r): JsonResponse
+    public function me(): JsonResponse
     {
         return json(Auth::user()->entityResource());
     }

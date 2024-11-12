@@ -25,6 +25,7 @@ class AdminRepository extends AbstractRepository implements RepositoryInterface
 
         $user = $this->userRepository->make([
             'name' => $data['name'],
+            'type' => $data['type'],
         ]);
 
         $admin->user()->save($user);

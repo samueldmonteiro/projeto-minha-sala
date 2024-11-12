@@ -20,7 +20,7 @@ class IsStudent
         if (!(Auth::user()->entity_type == Student::class)) {
             return jsonError(
                 'Acesso não autorizado',
-                ['error' => 'Somente alunos']
+                ['error' => 'Somente alunos'], 'error'
             );
         }
         return $next($request);

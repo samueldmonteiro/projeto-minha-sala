@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->morphs('entity');
+            $table->string('type')->comment('student|admin|teacher');
             $table->boolean('blocked')->default(false);
             $table->string('avatar')->default('users/avatar/default.png');
             $table->timestamps();

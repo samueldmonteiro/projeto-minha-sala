@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Pallete } from '../../../globals/GlobalStyles'
+
 
 export const RegisterForm = styled.form`
 
@@ -45,6 +45,15 @@ export const RegisterForm = styled.form`
     }
 `
 
+export const SelectInputs = styled.div`
+    max-width: 440px;
+
+    @media (max-width: 600px){
+        max-width: 310px;
+    }
+`
+
+
 export const MessageContainer = styled.div`
 
     margin-bottom:25px;
@@ -60,28 +69,5 @@ export const MessageContainer = styled.div`
 
     @media (max-width: 374px){
         width: 100%;
-    }
-`
-
-export const LinkArea = styled.div`
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 440px;
-    margin-top:20px;
-
-    a {
-        color: ${Pallete.secondary};
-        font-size:14px;
-        text-decoration:underline;
-    }
-
-    @media (max-width: 600px){
-        width: 305px;   
-    }
-
-    @media (max-width: 400px){
-        width: 275px;
     }
 `

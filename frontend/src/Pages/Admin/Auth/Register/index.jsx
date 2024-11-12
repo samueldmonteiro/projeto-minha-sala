@@ -12,6 +12,7 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Button, Alert } from '@mui/material';
 import validation from './validation';
+import { registerStudent } from '../../../Services/AuthService';
 import { useNavigate } from 'react-router-dom';
 
 const courses = ['Ciência da Computação (M)'];
@@ -35,7 +36,6 @@ const Register = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-  
     const onSubmit = async (data) => {
 
         const result = await registerStudent(data);

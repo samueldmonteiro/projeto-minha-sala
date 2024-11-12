@@ -2,13 +2,9 @@
 
 namespace App\Services;
 
-use App\Exceptions\AdminLoginException;
-use App\Exceptions\AdminNotFoundException;
-use App\Exceptions\RANotFoundException;
-use App\Exceptions\StudentLoginException;
+use App\Enums\AuthError;
 use App\Repositories\AdminRepository;
 use App\Repositories\StudentRepository;
-use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,37 +17,24 @@ class AuthService
         protected AdminRepository $adminRepository
     ) {}
 
-    public function loginStudent(string $RA): ?array
+    public function loginStudent(string $RA): array|AuthError
     {
-        try {
-            $student = $this->studentRepository->findByRA($RA);
+        $student = $this->studentRepository->findByRA($RA);
 
-            if (!$student) throw new RANotFoundException();
+        if (!$student) return AuthError::RANotFound;
 
-            return $this->handleToken($student);
-        } catch (RANotFoundException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new StudentLoginException();
-        }
+        return $this->handleToken($student);
     }
 
-    public function loginAdmin(string $email, string $password): array|null
+    public function loginAdmin(string $email, string $password): array|AuthError
     {
-        try {
-            $admin = $this->adminRepository->findByEmail($email);
+        $adm = $this->adminRepository->findByEmail($email);
 
-            if (!$admin) throw new AdminNotFoundException();
-
-            if (!Hash::check($password, $admin->password)) throw new AdminLoginException();
-
-            return $this->handleToken($admin);
-            
-        } catch (AdminNotFoundException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new AdminLoginException();
+        if ((!$adm) || (!Hash::check($password, $adm->password))) {
+            return AuthError::IncorrectLogin;
         }
+
+        return $this->handleToken($adm);
     }
 
     public function handleToken(Model $entity): array

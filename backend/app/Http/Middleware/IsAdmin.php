@@ -20,7 +20,7 @@ class IsAdmin
         if (!(Auth::user()->entity_type == Admin::class)) {
             return jsonError(
                 'Acesso não autorizado',
-                ['error' => 'Somente administradores']
+                ['error' => 'Somente administradores'], 'error'
             );
         }
 

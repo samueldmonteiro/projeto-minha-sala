@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Exceptions\CourseNotFoundException;
-use App\Exceptions\StudentRegistrationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRegisterRequest;
 use App\Repositories\StudentRepository;
 use App\Services\StudentService;
-use Exception;
 use Illuminate\Http\JsonResponse;
+use App\Enums\StudentError;
+
 
 class StudentController extends Controller
 {
@@ -18,24 +17,24 @@ class StudentController extends Controller
         protected StudentService $studentService
     ) {}
 
-    public function store(StudentRegisterRequest $request)
+    public function store(StudentRegisterRequest $request): JsonResponse
     {
         $data = $request->only(['name', 'RA', 'course', 'semester']);
 
-        try {
+        $result = $this->studentService->register($data);
 
-            $result = $this->studentService->register($data);
-            return json($result);
+        if ($result instanceof StudentError) {
 
-        } catch (CourseNotFoundException $e) {
-            return jsonError($e->getMessage(), [], $e->getCode());
+            return match ($result) {
+                StudentError::CourseNotFound => jsonError('Curso não encontrado!', [], 'error', 404),
 
-        } catch (StudentRegistrationException $e) {
-            return jsonError($e->getMessage(), [], $e->getCode());
+                StudentError::RADuplicated => jsonError('RA já cadastrado, faça login para continuar!'),
 
-        } catch (Exception $e) {
-            return jsonError('Erro inesperado ao cadastrar, tente novamente!', [], 500);
+                default => jsonError('Erro ao efetuar cadastro, tente novamente!')
+            };
         }
+
+        return json($result, 'Cadastro efetuado com sucesso');
     }
 
     public function access(): JsonResponse

@@ -14,12 +14,13 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Avatar, Menu, MenuItem } from '@mui/material';
 import { HeaderContainer, NavLinks, Logo, UserAvatar } from './styles';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import LogoImage from '../../assets/logo.png'
 import UserIconMenu from './UserIconMenu';
 import InfoIcon from '@mui/icons-material/Info';
 import HomeIcon from '@mui/icons-material/Home';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import useAuth from '../../Hooks/useAuth';
 
 const drawerWidth = 240;
 
@@ -37,7 +38,11 @@ const navItemsMobile = [
 
 ];
 
-function Header(props) {
+export const Header = (props) => {
+
+    const { isLogged } = useAuth();
+    if (!isLogged) return <Navigate to="/entrar" />;
+
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 

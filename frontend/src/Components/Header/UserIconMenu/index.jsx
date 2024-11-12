@@ -1,9 +1,8 @@
 import { Avatar, Menu, MenuItem } from '@mui/material';
-import UserImage from '../../../assets/user.jpg';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { NavLinks } from './styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -35,7 +34,8 @@ const UserIconMenu = () => {
         setOpenLogoutModal(true);
     };
 
-    const {logout, user} = useAuth();
+    const { logout, user } = useAuth();
+    const navigate = useNavigate();
 
     const handleCloseLogoutModal = () => {
         setOpenLogoutModal(false);
@@ -43,6 +43,7 @@ const UserIconMenu = () => {
 
     const confirmLogout = () => {
         logout();
+        navigate('/');
     }
 
     return (

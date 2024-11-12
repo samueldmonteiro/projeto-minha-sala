@@ -15,7 +15,8 @@ class StudentSeeder extends Seeder
             'name' => 'Samuel Davi',
             'RA' => '9828228819',
             'semester' => 4,
-            'course_id' => 1
+            'course_id' => 1,
+            'type' => 'student'
         ]); 
     }
 }

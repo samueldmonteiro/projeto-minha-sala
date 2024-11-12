@@ -1,235 +1,91 @@
-import {
-    Button,
-    FormControl,
-    InputLabel,
-    OutlinedInput,
-    TextField,
-    InputAdornment,
-    IconButton,
-    Alert,
-} from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { SignInPage } from '@toolpad/core/SignInPage';
-import { useTheme } from '@mui/material/styles';
-import { PageContainer } from '../../../globals/styles';
-import { LoginContainer } from './styles';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Validation from './Validation';
+import TextField from '@mui/material/TextField';
+import { Button } from '@mui/material';
+import { Key as KeyIcon, Person as PersonIcon } from '@mui/icons-material';
+import { LinkArea, RegisterForm } from './styles';
+import { PageContainer, TitleOne } from '../../../globals/styles';
+import validation from './validation';
 import Header from '../../../Components/Auth/Header';
-import useAuth from '../../../Hooks/useAuth'
-import LoadingButton from '@mui/lab/LoadingButton';
+import useMessage from '../../../Hooks/useMessage';
+import { loginRequest } from '../../../Services/Student/AuthService';
+import { useContext } from 'react';
+import { AuthContext } from '../../../Context/AuthContext';
 
 
-const providers = [{ id: 'credentials', name: 'Email and Password' }];
-
-function CustomEmailField({ register, errors, loginError }) {
-    return (
-        <>
-            {loginError && <><Alert sx={{ display: 'flex', justifyContent: 'center' }} severity="error">Login Incorreto!</Alert>
-                <br /></>}
-            <TextField
-                {...register("email")}
-                id="input-with-icon-textfield"
-                label="Email"
-                type="email"
-                size="small"
-                required
-                fullWidth
-                error={!!errors.email}
-                helperText={errors.email?.message}
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <AccountCircle fontSize="inherit" />
-                        </InputAdornment>
-                    ),
-                }}
-                variant="outlined"
-            />
-        </>
-
-    );
-}
-
-function CustomPasswordField({ register, errors }) {
-    const [showPassword, setShowPassword] = useState(false);
-
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-
-    return (
-        <FormControl sx={{ my: 2 }} fullWidth variant="outlined">
-
-            <InputLabel size="small" htmlFor="outlined-adornment-password">
-                Senha
-            </InputLabel>
-            <OutlinedInput
-                {...register("password")}
-                id="outlined-adornment-password"
-                type={showPassword ? 'text' : 'password'}
-                size="small"
-                required
-                error={!!errors.password}
-                endAdornment={
-                    <InputAdornment position="end">
-                        <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                            size="small"
-                        >
-                            {showPassword ? (
-                                <VisibilityOff fontSize="inherit" />
-                            ) : (
-                                <Visibility fontSize="inherit" />
-                            )}
-                        </IconButton>
-                    </InputAdornment>
-                }
-                label="Senha"
-            />
-            {errors.password && <p style={{ color: 'red', fontSize: '0.8rem' }}>{errors.password.message}</p>}
-        </FormControl>
-    );
-}
-
-function CustomButton() {
-    return (
-        <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="small"
-            disableElevation
-            fullWidth
-            sx={{ my: 2 }}
-        >
-            Entrar
-        </Button>
-    );
-}
-
-
-function SignUpLink() {
-    return (
-        <Link to="/cadastrar" variant="body2" color={'secondary'}>
-            Cadastrar-me
-        </Link>
-    );
-}
-
-function ForgotPasswordLink() {
-    return (
-        <Link to="/esqueceu" variant="body2" color={'secondary'}>
-            Esqueceu sua senha?
-        </Link>
-    );
-}
-
-const TranslatePage = () => {
-    document.querySelector('h5').innerHTML = 'Entrar';
-    document.querySelectorAll('p').forEach(el => {
-        if (el.innerHTML.includes("Welcome")) {
-            el.innerHTML = "Acesse Sua Conta Abaixo";
-        }
+const Login = () => {
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(validation),
+        defaultValues: { RA: '' }
     });
 
-    document.querySelectorAll('span').forEach(el => {
-        if (el.innerHTML.includes("Remember")) {
-            el.innerHTML = "Relembrar acesso";
-        }
-    });
-}
-
-
-function ButtonLoading() {
-    return (
-        <LoadingButton
-            color="secondary"
-            loading={true}
-            loadingPosition="start"
-            variant="contained"
-            type="submit"
-            size="small"
-            disableElevation
-            fullWidth
-            sx={{ my: 2 }}
-        >
-            Entrar
-        </LoadingButton>)
-}
-
-
-export default function Login() {
-
-    const { login, isLogged } = useAuth();
-    if(isLogged) return <Navigate to="/"/>;
-    
-
-    const { register, handleSubmit, formState: { errors } } = useForm({
-        resolver: yupResolver(Validation),
-    });
-
-    useEffect(() => {
-        TranslatePage();
-    }, []);
-
-    const theme = useTheme();
-
-    const [loginError, setLoginError] = useState(false);
-    const [loadingLogin, setLoadingLogin] = useState(false);
+    const { login } = useContext(AuthContext);
     const navigate = useNavigate();
+    const { Message, setMessage } = useMessage();
 
+    const onSubmit = async (data) => {
 
-    const onSubmit = async (formData) => {
-        setLoginError(false);
-        setLoadingLogin(true);
+        const resp = await loginRequest(data.RA);
+        console.log(resp)
 
-        const result = await login(formData.get('email'), formData.get('password'));
-        setLoadingLogin(false);
-
-
-        if (!result.status) {
-            setLoginError(true);
-        } else {
-            navigate('/');
+        if (resp?.statusCode == 500) {
+            setMessage('Erro inesperado, tente novamente mais tarde', 'error');
+            return;
         }
 
-        console.log(result);
+        if (resp?.error) {
+            setMessage(resp.message, resp.type);
+            return;
+        }
+
+        setMessage('Registro efetuado com sucesso!', 'success');
+
+        login(resp.data.token, resp.data.user);
+        navigate('/');
     };
 
     return (
-
         <>
             <Header />
             <PageContainer>
-                <LoginContainer>
-                    <AppProvider theme={theme}>
-                        <SignInPage
-                            signIn={(provider, formData) =>
-                                onSubmit(formData)
-                            }
-                            slots={{
-                                emailField: (props) => <CustomEmailField loginError={loginError} {...props} register={register} errors={errors} />,
-                                passwordField: (props) => <CustomPasswordField {...props} register={register} errors={errors} />,
-                                submitButton: loadingLogin ? ButtonLoading : CustomButton,
-                                signUpLink: SignUpLink,
-                                forgotPasswordLink: ForgotPasswordLink,
-                            }}
-                            providers={providers}
-                        />
-                    </AppProvider>
-                </LoginContainer>
-            </PageContainer></>
+                <RegisterForm onSubmit={handleSubmit(onSubmit)}>
+                    <TitleOne><PersonIcon /> Digite seu RA</TitleOne>
+                    {Message}
+                    <Controller
+                        name="RA"
+                        required
+                        control={control}
+                        render={({ field }) => (
+                            <TextField
+                                {...field}
+                                label="RA do aluno"
+                                error={!!errors.RA}
+                                placeholder="RA"
+                                helperText={errors.RA?.message}
+                                sx={{ marginBottom: '23px' }}
+                                InputProps={{
+                                    startAdornment: <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />,
+                                }}
+                            />
+                        )}
+                    />
+                    <Button color='primary' sx={{ width: '100%' }} type="submit" variant='contained'>Entrar</Button>
+
+                    <LinkArea>
+                        <Link to="/recuperar">
+                            Esqueceu seu acesso?
+                        </Link>
+
+                        <Link to="/cadastrar">
+                            Cadastrar-me
+                        </Link>
+                    </LinkArea>
+                </RegisterForm>
+            </PageContainer>
+        </>
     );
-}
+};
+
+export default Login;
+// 70

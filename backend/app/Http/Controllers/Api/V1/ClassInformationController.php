@@ -21,6 +21,7 @@ class ClassInformationController extends Controller
 
         $data = $this->classInformationService->getTodayClass();
 
+
         if($data->isEmpty()) {
             return jsonError('Não existe aula registrada neste dia', [], 404);
         }

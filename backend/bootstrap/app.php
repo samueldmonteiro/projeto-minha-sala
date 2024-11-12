@@ -24,7 +24,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'student' => IsStudent::class,
             'admin' => IsAdmin::class,
         ]);
-
     })
     ->withExceptions(function (Exceptions $exceptions) {
 
@@ -32,7 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (AuthenticationException $e, Request $request) {
             if ($request->is('api/*')) {
 
-                return jsonError('Erro na autenticação', [], 401);
+                return jsonError('Erro na autenticação', [], 'error', 401);
             }
         });
 
@@ -40,7 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('*') || $request->is('api/*') || $request->is('api')) {
 
-                return jsonError('Endpoint não encontrado', ['endpoint' => $request->url(), 'error' => 'not found'], 404);
+                return jsonError('Endpoint não encontrado', ['endpoint' => $request->url(), 'error' => 'not found'], 'error', 404);
             }
         });
     })->create();

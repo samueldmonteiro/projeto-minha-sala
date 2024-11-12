@@ -15,7 +15,8 @@ class AdminSeeder extends Seeder
         $adminRepository->create([
             'name' => 'adm_01',
             'email' => 'samuel.dvmonteiro@gmail.com',
-            'password' => '4321'
+            'password' => '4321',
+            'type' => 'admin'
         ]);
     }
 }

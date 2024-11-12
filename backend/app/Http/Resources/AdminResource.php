@@ -13,7 +13,7 @@ class AdminResource extends JsonResource
             'id' => $this->id,
             'name' => $this->user->name,
             'email' => $this->email,
-            'password' => $this->password,
+            'type' => $this->user->type,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];

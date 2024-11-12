@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Admin extends Model
 {
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     protected $fillable = [
         'email',
         'password'
