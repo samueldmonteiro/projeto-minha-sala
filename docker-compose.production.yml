@@ -63,7 +63,7 @@ services:
       - minha_sala_anhanguera
 
     ports:
-      - "127.0.0.1:3306:3306"
+      - "0.0.0.0:3306:3306"
 
   redis:
     image: redis:7.4.1

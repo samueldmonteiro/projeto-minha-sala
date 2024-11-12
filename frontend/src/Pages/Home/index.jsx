@@ -8,9 +8,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { ClassInformationBlock, ClassInformationContainer, Date, MoreInformations, MoreInformationsItem, PaginationControl, Room, Subject, Time } from './styles';
 import Pagination from '@mui/material/Pagination';
-import { getByDay, getTodayClass } from '../../Services/ClassService';
+import { getByDay, getTodayClass } from '../../Services/ClassInformation/GeneralService';
 import LoadPage from '../../Components/LoadPage';
-
 import { useLocation } from 'react-router-dom';
 
 function getTodayDate() {
@@ -29,10 +28,11 @@ const Home = () => {
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const searchDay = queryParams.get('dia');
+    const searchDay = queryParams.get('day');
 
     const [loadingHome, setLoadingHome] = useState(true);
     const [error, setError] = useState(false);
+    const [classNotExists, setClassNotExists] = useState(false);
 
     const [classData, setClassData] = useState([]);
     const [currentClassIndex, setCurrentClassIndex] = useState(0);
@@ -45,13 +45,14 @@ const Home = () => {
 
     const getInformationClass = async (searchEngine, query = null) => {
         searchEngine(query).then(resp => {
-            if (!resp.status) {
+            console.log(resp)
+            if(resp.error){
                 setLoadingHome(false);
                 setError(true);
-            } else {
-                setClassData(resp.data);
-                console.log(resp.data[0])
+                return;
             }
+
+            setClassData(resp.data);
             setLoadingHome(false);
         });
     }
@@ -59,6 +60,7 @@ const Home = () => {
     useEffect(() => {
 
         const searchEngine = searchDay ? getByDay : getTodayClass;
+        console.log(searchDay);
 
         getInformationClass(searchEngine, searchDay);
 
@@ -70,6 +72,8 @@ const Home = () => {
 
     }, [searchDay, getTodayClass, getByDay]);
 
+
+
     if (loadingHome) return (<LoadPage open={loadingHome} />);
 
     if (error) return (
@@ -77,6 +81,14 @@ const Home = () => {
             <ClassInformationContainer>
                 <TitleOne>Houve um erro ao buscar informações</TitleOne>
                 <TitleOne>Atualize a página!</TitleOne>
+            </ClassInformationContainer>
+        </PageContainer>
+    )
+
+    if (classNotExists) return (
+        <PageContainer>
+            <ClassInformationContainer>
+                <TitleOne>Não existe aula neste dia</TitleOne>
             </ClassInformationContainer>
         </PageContainer>
     )
@@ -91,7 +103,7 @@ const Home = () => {
                         </Time>
 
                         <Date>
-                            {searchDay ? currentClass.day : getTodayDate()}
+                            {searchDay ? localStorage.getItem('dayByClass') : getTodayDate()}
                         </Date>
 
                         <Room>
@@ -106,13 +118,21 @@ const Home = () => {
                             <Pagination count={classData.length} variant="outlined" color='primary' onChange={nextClass} />
                         </PaginationControl>
 
-
                         <MoreInformations>
                             <MoreInformationsItem>
                                 <TableContainer component={Paper}>
                                     <Table aria-label="simple table">
 
                                         <TableBody>
+                                        <TableRow
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    Curso
+                                                </TableCell>
+                                                <TableCell align="right">{currentClass.course}</TableCell>
+
+                                            </TableRow>
                                             <TableRow
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                             >

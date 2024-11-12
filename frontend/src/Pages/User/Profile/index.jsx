@@ -1,15 +1,15 @@
-import { PageContainer } from '../../../globals/styles';
+import { PageContainer, TitleOne } from '../../../globals/styles';
 import useAuth from '../../../Hooks/useAuth';
 
 const Profile = () => {
 
-    const {user} = useAuth();
+    const { user } = useAuth();
 
     console.log(user);
 
     return (
         <PageContainer>
-oi
+            <TitleOne>Ainda em construção...</TitleOne>
         </PageContainer>
     )
 }

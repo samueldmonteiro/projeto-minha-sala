@@ -42,8 +42,9 @@ const Calender = () => {
             setOpenErrorModal(true);
             return;
         }
-
-        navigate(`/?dia=${capitalizedDay}`);
+        
+        localStorage.setItem('dayByClass', currentDay.format('dddd, D [de] MMMM'));
+        navigate(`/?day=${capitalizedDay}`);
     }
 
     return (

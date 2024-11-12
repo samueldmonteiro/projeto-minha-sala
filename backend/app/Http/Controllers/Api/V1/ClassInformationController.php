@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassInformationGetByDayRequest;
+use App\Http\Resources\ClassInformationResource;
 use App\Services\ClassInformationService;
 use App\Services\UserVisitService;
 use Illuminate\Http\JsonResponse;
@@ -22,25 +23,25 @@ class ClassInformationController extends Controller
         $data = $this->classInformationService->getTodayClass();
 
 
-        if($data->isEmpty()) {
+        if ($data->isEmpty()) {
             return jsonError('Não existe aula registrada neste dia', [], 404);
         }
 
-        return json($data);
+        return json(ClassInformationResource::collection($data));
     }
 
     public function getByDay(ClassInformationGetByDayRequest $request): JsonResponse
     {
-        $day = $request->day;
+        $day = $request->query('day');
 
-        if(!$day) return $this->today();
+        if (!$day) return $this->today();
 
         $data = $this->classInformationService->getClassByDay($day);
 
-        if($data->isEmpty()) {
+        if ($data->isEmpty()) {
             return jsonError('Não existe aula registrada neste dia', [], 404);
         }
 
-        return json($data);
+        return json(ClassInformationResource::collection($data));
     }
 }
