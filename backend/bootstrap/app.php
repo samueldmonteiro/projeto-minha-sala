@@ -3,6 +3,8 @@
 use App\Http\Middleware\ForceJsonResponse;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsStudent;
+use App\Http\Middleware\LoginAttemptBlock;
+use App\Http\Middleware\LoginIsBlockedMiddlweare;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -23,6 +25,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'student' => IsStudent::class,
             'admin' => IsAdmin::class,
+            'loginAttempBlock' => LoginAttemptBlock::class,
+            'loginIsBlocked' => LoginIsBlockedMiddlweare::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

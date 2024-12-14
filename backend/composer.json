@@ -13,7 +13,9 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "lucascudo/laravel-pt-br-localization": "^3.0",
-        "php-open-source-saver/jwt-auth": "^2.7"
+        "php-open-source-saver/jwt-auth": "^2.7",
+        "predis/predis": "^2.0",
+        "samueldmonteiro/result-type": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

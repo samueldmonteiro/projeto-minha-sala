@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Services;
+namespace App\UseCases\ClassInformation;
 
-use App\Repositories\ClassInformationRepository;
 use DateTime;
+use App\Repositories\ClassInformationRepository;
+use App\UseCases\Auth\GetUser;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
 
-class ClassInformationService
+class GetTodayClass
 {
     public function __construct(
-        protected ClassInformationRepository $classInformationRepository,
+        private ClassInformationRepository $classInformationRepository,
+        private GetUser $getUser
     ) {}
 
-    public function getTodayClass(): Collection
+    public function execute(): Collection
     {
         $date = new DateTime('now');
 
@@ -37,7 +38,7 @@ class ClassInformationService
             $date->modify('+1 day');
         }
 
-        $student = Auth::user()->entity;
+        $student = $this->getUser->execute()->entity;
 
         $weekDay = $date->format('l');
         $today = $weekDays[$weekDay];
@@ -49,14 +50,5 @@ class ClassInformationService
         );
     }
 
-    public function getClassByDay(string $day): Collection
-    {
-        $student = Auth::user()->entity;
-
-        return $this->classInformationRepository->getByStudentData(
-            $day,
-            $student->course_id,
-            $student->semester
-        );
-    }
+   
 }

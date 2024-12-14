@@ -2,59 +2,68 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Enums\AuthError;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminLoginRequest;
 use App\Http\Requests\StudentLoginRequest;
-use App\Services\AuthService;
+use App\UseCases\Auth\CheckAuthentication;
+use App\UseCases\Auth\GetUser;
+use App\UseCases\Auth\LoginAdmin;
+use App\UseCases\Auth\LoginStudent;
+use App\UseCases\Auth\Logout;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function __construct(protected AuthService $authService) {}
+    public function __construct(
+        private LoginStudent $loginStudent,
+        private LoginAdmin $loginAdmin,
+        private CheckAuthentication $checkAuthentication,
+        private GetUser $getUser,
+        private Logout $logout
+    ) {}
+
 
     public function loginStudent(StudentLoginRequest $request): JsonResponse
     {
-        $result = $this->authService->loginStudent($request->RA);
+        $result = $this->loginStudent->execute($request->RA);
 
-        if (is_array($result)) {
-            return json($result);
+        if ($result->isError()) {
+
+            return jsonError($result->getErrorMessage(), [], 'warning', $result->getErrorCode());
         }
 
-        return match ($result) {
-            AuthError::RANotFound => jsonError('RA não identificado!', [], 'warning', 404),
-            default => jsonError('Erro inesperado ao efetuar login')
-        };
+        return json($result->getValue());
     }
 
     public function loginAdmin(AdminLoginRequest $request): JsonResponse
     {
-        $result = $this->authService->loginAdmin(
+        $result = $this->loginAdmin->execute(
             $request->email,
             $request->password
         );
 
-        if (!is_array($result)) return jsonError('Login incorreto');
+        if ($result->isError()) {
+            return jsonError($result->getErrorMessage(), [], 'warning', $result->getErrorCode());
+        }
 
-        return json($result);
+        return json($result->getValue());
     }
 
     public function check(): JsonResponse
     {
         return json([
-            'check' => Auth::check(),
-            'user' => Auth::user()->entityResource()
+            'check' => $this->checkAuthentication->execute(),
+            'user' => $this->getUser->execute()->entityResource()
         ]);
     }
 
     public function me(): JsonResponse
     {
-        return json(Auth::user()->entityResource());
+        return json($this->getUser->execute()->entityResource());
     }
 
     public function logout(): void
     {
-        $this->authService->logout();
+        $this->logout->execute();
     }
 }

@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassInformationGetByDayRequest;
 use App\Http\Resources\ClassInformationResource;
-use App\Services\ClassInformationService;
-use App\Services\UserVisitService;
-use Illuminate\Http\JsonResponse;
+use App\UseCases\UserVisit\IncreaseVisit;
+use App\UseCases\ClassInformation\{GetClassByDay, GetTodayClass};
 
 class ClassInformationController extends Controller
 {
     public function __construct(
-        protected ClassInformationService $classInformationService,
-        protected UserVisitService $userVisitService
+        private GetTodayClass $getTodayClass,
+        private GetClassByDay $getClassByDay,
+        private IncreaseVisit $increaseVisit
     ) {}
 
     public function today(): JsonResponse
     {
-        $this->userVisitService->increaseVisit();
+        $this->increaseVisit->execute();
 
-        $data = $this->classInformationService->getTodayClass();
-
+        $data = $this->getTodayClass->execute();
 
         if ($data->isEmpty()) {
             return jsonError('Não existe aula registrada neste dia', [], 'warning', 404);
@@ -36,7 +36,7 @@ class ClassInformationController extends Controller
 
         if (!$day) return $this->today();
 
-        $data = $this->classInformationService->getClassByDay($day);
+        $data = $this->getClassByDay->execute($day);
 
         if ($data->isEmpty()) {
             return jsonError('Não existe aula registrada neste dia', [], 'warning', 404);

@@ -57,24 +57,30 @@ services:
 
     environment:
       - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
 
     networks:
       - minha_sala_anhanguera
 
     ports:
-      - "0.0.0.0:3306:3306"
+      - "127.0.0.1:3306:3306"
 
   redis:
     image: redis:7.4.1
-    container_name: redis_server
+    container_name: redis
     ports:
-      - "6379:6379" # Mapeia a porta 6379 do Redis
+      - "127.0.0.1:6379:6379" 
     volumes:
-      - redis_data:/data # Monta o volume para persistência de dados
-    restart: always # Reinicia automaticamente caso o container pare
+      - redis_data:/data 
+    restart: always 
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     networks:
       - minha_sala_anhanguera
+    command: ["sh", "-c", "redis-server --requirepass $REDIS_PASSWORD"]
+
 
 networks:
   minha_sala_anhanguera:

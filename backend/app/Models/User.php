@@ -14,14 +14,12 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
-
     protected $fillable = [
         'name',
         'type',
         'avatar',
         'blocked'
     ];
-
 
     /**
      * Get the attributes that should be cast.
@@ -50,12 +48,10 @@ class User extends Authenticatable implements JWTSubject
             case Admin::class:
                 return new AdminResource($this->entity);
                 break;
-                
             default:
                 return null;
         }
     }
-
 
     public function getJWTIdentifier(): mixed
     {

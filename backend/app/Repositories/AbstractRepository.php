@@ -2,11 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\RepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-abstract class AbstractRepository implements RepositoryInterface
+abstract class AbstractRepository
 {
     public function __construct(protected Model $model) {}
 

@@ -2,12 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\RepositoryInterface;
 use App\Models\Student;
 use App\Repositories\AbstractRepository;
 use Exception;
 
-class StudentRepository extends AbstractRepository implements RepositoryInterface
+class StudentRepository extends AbstractRepository
 {
     public function __construct(
         Student $model,
@@ -16,30 +15,25 @@ class StudentRepository extends AbstractRepository implements RepositoryInterfac
         parent::__construct($model);
     }
 
-
     public function create(array $data): Student
     {
-        try {
-            $student = $this->model->create([
-                'course_id' => $data['course_id'],
-                'RA' => $data['RA'],
-                'semester' => $data['semester'],
-            ]);
+        $student = $this->model->create([
+            'course_id' => $data['course_id'],
+            'RA' => $data['RA'],
+            'semester' => $data['semester'],
+        ]);
 
-            $user = $this->userRepository->make([
-                'name' => $data['name'],
-                'type' => 'student',
-            ]);
+        $user = $this->userRepository->make([
+            'name' => $data['name'],
+            'type' => 'student',
+        ]);
 
-            $student->user()->save($user);
+        $student->user()->save($user);
 
-            return $student;
-        } catch (Exception $e) {
-            throw $e;
-        }
+        return $student;
     }
 
-    public function findByRA(string $RA): Student|null
+    public function findByRA(string $RA): ?Student
     {
         return $this->model->where('RA', $RA)->first();
     }

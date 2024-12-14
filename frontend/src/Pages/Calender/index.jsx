@@ -59,7 +59,8 @@ const Calender = () => {
                 <DialogTitle><ErrorIcon sx={{ position: 'relative', top: '6px' }} /> {"Ops!"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Nenhuma aula encontrada nesse dia!
+                        Nenhuma aula encontrada nesse dia!  const dispatch = useDispatch();
+
                     </DialogContentText>
                 </DialogContent>
 

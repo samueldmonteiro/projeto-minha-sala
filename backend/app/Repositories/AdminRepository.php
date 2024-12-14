@@ -2,12 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\RepositoryInterface;
 use App\Models\Admin;
 use App\Repositories\AbstractRepository;
 use Illuminate\Support\Facades\Hash;
 
-class AdminRepository extends AbstractRepository implements RepositoryInterface
+class AdminRepository extends AbstractRepository
 {
     public function __construct(
         Admin $model,
@@ -33,7 +32,7 @@ class AdminRepository extends AbstractRepository implements RepositoryInterface
         return $admin;
     }
 
-    public function findByEmail(string $email): Admin|null
+    public function findByEmail(string $email): ?Admin
     {
         return $this->model->where('email', $email)->first();
     }

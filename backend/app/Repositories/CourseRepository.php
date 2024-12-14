@@ -2,10 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\RepositoryInterface;
 use App\Models\Course;
 
-class CourseRepository extends AbstractRepository implements RepositoryInterface
+class CourseRepository extends AbstractRepository 
 {
     public function __construct(Course $model)
     {

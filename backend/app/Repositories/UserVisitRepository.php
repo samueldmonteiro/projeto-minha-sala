@@ -2,11 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\RepositoryInterface;
 use App\Models\UserVisit;
 use App\Repositories\AbstractRepository;
 
-class UserVisitRepository extends AbstractRepository implements RepositoryInterface
+class UserVisitRepository extends AbstractRepository 
 {
     public function __construct(
         UserVisit $model,
@@ -14,9 +13,8 @@ class UserVisitRepository extends AbstractRepository implements RepositoryInterf
         parent::__construct($model);
     }
 
-    public function getByUserId(int $id): UserVisit|null
+    public function getByUserId(int $id): ?UserVisit
     {
         return $this->model->where('user_id', $id)->first();
     }
-
 }

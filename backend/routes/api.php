@@ -15,11 +15,12 @@ Route::get('/', function () {
 Route::prefix('v1')->group(function () {
 
     // Auth
-    Route::prefix('auth')->controller(AuthController::class)->name('auth.')->group(function () {
+    Route::prefix('auth')->controller(AuthController::class)->name('auth.')->middleware('loginIsBlocked')->group(function () {
 
-        Route::post('login/student', 'loginStudent')->name('login.student');
+        Route::post('login/student', 'loginStudent')->name('login.student')->middleware('loginAttempBlock');
 
-        Route::post('login/admin', 'loginAdmin')->name('login.admin');
+        Route::post('login/admin', 'loginAdmin')->name('login.admin')
+            ->middleware('loginAttempBlock');
 
         Route::get('check', 'check')->name('check')->middleware('auth:user');
 

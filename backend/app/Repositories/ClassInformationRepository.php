@@ -2,11 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\RepositoryInterface;
 use App\Models\ClassInformation;
 use Illuminate\Database\Eloquent\Collection;
 
-class ClassInformationRepository extends AbstractRepository implements RepositoryInterface
+class ClassInformationRepository extends AbstractRepository 
 {
     public function __construct(
         ClassInformation $model
