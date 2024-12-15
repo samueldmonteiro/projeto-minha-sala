@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Models\Student;
 use App\Repositories\AbstractRepository;
-use Exception;
 
 class StudentRepository extends AbstractRepository
 {

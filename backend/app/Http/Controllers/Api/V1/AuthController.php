@@ -3,14 +3,9 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminLoginRequest;
-use App\Http\Requests\StudentLoginRequest;
-use App\UseCases\Auth\CheckAuthentication;
-use App\UseCases\Auth\GetUser;
-use App\UseCases\Auth\LoginAdmin;
-use App\UseCases\Auth\LoginStudent;
-use App\UseCases\Auth\Logout;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\{AdminLoginRequest, StudentLoginRequest};
+use App\UseCases\Auth\{GetUser, LoginAdmin, LoginStudent, Logout, CheckAuthentication};
 
 class AuthController extends Controller
 {
@@ -21,7 +16,6 @@ class AuthController extends Controller
         private GetUser $getUser,
         private Logout $logout
     ) {}
-
 
     public function loginStudent(StudentLoginRequest $request): JsonResponse
     {

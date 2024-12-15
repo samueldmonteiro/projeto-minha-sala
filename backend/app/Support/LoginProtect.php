@@ -18,7 +18,7 @@ class LoginProtect
         $this->maxAttempts = $maxAttempts;
         $this->blockDuration = $blockDuration;
 
-        $ip = Request::ip();
+        $ip = Request::header('X-Real-IP');
         $this->ip = $ip;
         $this->redisKey = "failed_login_attempts:{$ip}";
     }

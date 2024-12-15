@@ -1,5 +1,4 @@
 
-
 const response = (status, data = null, message, statusCode = 200, type = 'error') => {
 
     return {

@@ -18,7 +18,6 @@ export const loginRequest = async (RA) => {
     }
 }
 
-
 export const registerRequest = async (name, RA, course, semester) => {
     try {
         const resp = await api.post('/student/register', { name, RA, course, semester });

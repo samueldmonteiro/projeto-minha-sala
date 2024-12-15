@@ -6,11 +6,13 @@ use App\Http\Controllers\Api\V1\ClassInformationController;
 use App\Http\Controllers\Api\V1\CourseController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\UserVisitController;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return json('active', 'API Minha Sala');
+    return json(true, 'API Minha Sala');
 });
+
 
 Route::prefix('v1')->group(function () {
 

@@ -15,7 +15,7 @@ class LoginAttemptLog
     public function incorrect(string $message, array $context = []): void
     {
         $messageDefault = "[incorrect login] - ";
-        $contextDefault = ['IP' => Request::ip()];
+        $contextDefault = ['IP' => Request::header('X-Real-IP')];
 
         $newMessage = $messageDefault . $message;
         $newCoxtent = array_merge($contextDefault, $context);
@@ -43,7 +43,7 @@ class LoginAttemptLog
     public function loginBlocked(string $message, array $context = []): void
     {
         $messageDefault = "[blocked] - ";
-        $contextDefault = ['IP' => Request::ip()];
+        $contextDefault = ['IP' => Request::header('X-Real-IP')];
 
         $newMessage = $messageDefault . $message;
         $newCoxtent = array_merge($contextDefault, $context);
